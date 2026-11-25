@@ -1,0 +1,174 @@
+15779|T|1st|16:58|Adam Durham|1||
+15779|T|1st|5:41|Vaughn Labelle|1|Adam Lamoureux/Drew Anholt|
+15779|T|1st|1:07|Adam Lamoureux|1|Kyle Haugrud/Gavin Reynolds|
+15779|T|2nd|17:36|Mike Leibel|1|Kolton Jordison/Taylor Anderson|
+15779|T|2nd|12:22|Vaughn Labelle|2|Taylor Anderson/Kolton Jordison|
+15779|O|2nd|10:01|Fletcher Taylor|1|Mark Mason/Kevin Shaw|
+15779|O|2nd|9:11|Marcus Head|1|Jordan Vine/Chase Simard|
+15779|T|2nd|6:49|Adam Durham|2|Drew Anholt/Matthew Briens|
+15779|O|2nd|4:39|Russell Wazney|1|Jordan Vine/Nathan Wood|
+15779|T|2nd|4:23|Matt McIntyre|1|Kyle Haugrud/Adam Lamoureux|
+15779|T|2nd|3:43|Kyle Haugrud|1|Adam Lamoureux/Lee Brown|
+15779|O|3rd|8:56|Jordan Moe|1|Marcus Head/Steve Holford|
+15779|O|3rd|5:53|Mark Mason|1|Nathan Wood/Jordan Vine|
+15779|T|3rd|0:56|Mike Leibel|2|Darryl Folkerson/Matt Stephens|
+15779|T|3rd|0:34|Vaughn Labelle|3|Taylor Anderson|
+15821|O|1st|18:42|Brandin Kiist|1|Dave Ohlhauser|
+15821|O|1st|15:52|Tim Robinson|2||
+15821|O|1st|14:39|Lewis Wildman|1|Colten Wildman/Callum Minor|
+15821|T|1st|13:32|Johnathan Bursey|1|Adam Durham/Kolton Jordison|
+15821|O|1st|11:24|Callum Minor|2|Cole Brewis|
+15821|O|1st|6:42|Cole Brewis|3|Lewis Wildman/Zach Duncan|
+15821|T|1st|6:26|Kolton Jordison|1|Jeff Wright|
+15821|T|1st|4:10|Adam Durham|3|Kenton Haugrud/Matt Stephens|
+15821|T|2nd|16:16|Adam Lamoureux|2|Johnathan Bursey/Adam Durham|
+15821|T|2nd|12:37|Johnathan Bursey|2||PPG
+15821|O|2nd|5:37|Zach Duncan|1|Lewis Wildman|
+15821|T|2nd|3:33|Jeff Wright|1|Kolton Jordison|
+15821|T|2nd|2:26|Mitch Lipon|1|Johnathan Bursey/Kolton Jordison|
+15821|T|3rd|12:54|Kolton Jordison|2|Adam Lamoureux/Matt Stephens|
+15821|T|3rd|11:37|Johnathan Bursey|3|Jeff Wright|
+15821|T|3rd|11:30|Adam Durham|4|Johnathan Bursey|
+15821|O|3rd|10:39|Tim Robinson|3|Kevin Sharp/Brandin Kiist|
+15826|T|1st|17:50|Bryce Schneider|1|Adam Durham/Darryl Folkerson|
+15826|O|1st|14:46|Kyle Thompson|3|Joel Manson/Michael Balchand|
+15826|O|1st|10:38|Danny Faulkner|4|Clifton O'Brien/Dawson Nelson|
+15826|T|1st|10:05|Vaughn Labelle|4|Mitch Lipon/Adam Lamoureux|
+15826|T|1st|7:22|Vaughn Labelle|5||
+15826|O|1st|1:57|Shane Henke|1|Thomas McIvor/Clifton O'Brien|
+15826|T|2nd|18:55|Bryce Schneider|2||SHG
+15826|T|2nd|1:40|Vaughn Labelle|6|Adam Lamoureux/Mike Leibel|
+15826|T|2nd|1:31|Kenton Haugrud|1|Adam Durham/Bryce Schneider|
+15826|T|3rd|9:11|Bryce Schneider|3|Adam Durham/Mike Leibel|
+15826|T|3rd|8:26|Mitch Lipon|2|Kenton Haugrud/Darryl Folkerson|
+15826|T|3rd|3:57|Adam Lamoureux|3|Vaughn Labelle/Mitch Lipon|
+15826|T|3rd|2:39|Mike Leibel|3|Adam Durham/Drew Anholt|
+15842|O|1st|16:54|Mike Buydens|3|Logan Gabel|
+15842|T|1st|10:14|Vaughn Labelle|7|Taylor Anderson/Matt Stephens|
+15842|T|1st|6:06|Darryl Folkerson|1||
+15842|O|2nd|18:47|Logan Gabel|4|Dennis Clark|
+15842|T|2nd|17:22|Adam Lamoureux|4||
+15842|O|2nd|13:05|Colby Mooney|1|Connor Merritt/Nolan Kwasney|
+15842|O|2nd|12:30|Logan Gabel|5|Frankie Grzenda/Nolan Kwasney|
+15842|O|2nd|3:17|Dylan Salter|5|Mathew Lafrance|
+15842|O|3rd|6:48|Dylan Salter|6|Logan Gabel|
+15857|O|1st|18:21|Sean McCarthy|1|Curtis Williamson|
+15857|T|1st|14:43|Taylor Anderson|1|Matt McIntyre/Kyle Haugrud|
+15857|O|1st|14:15|Greg Hoffort|2|Matthew White/Matthew Cook|
+15857|T|1st|10:07|Adam Durham|5|Luke Reimer|
+15857|O|1st|6:22|Braydon Hart|4||
+15857|T|1st|5:56|Adam Lamoureux|5|Luke Reimer/Adam Durham|
+15857|T|1st|4:30|Kyle Haugrud|2|Matt McIntyre/Ryan Matthyssen|
+15857|T|1st|4:04|Matt McIntyre|2|Kyle Haugrud|
+15857|O|1st|0:36|Braydon Hart|5||
+15857|O|2nd|18:54|Bj Gurba|3|Darryl Macdonald|
+15857|O|2nd|18:20|Bj Gurba|4|Matthew Cook/Curtis Williamson|
+15857|O|2nd|11:03|Greg Hoffort|3|Joel Merkosky/Matthew White|
+15857|T|2nd|0:11|Kyle Haugrud|3||
+15857|T|3rd|9:51|Adam Durham|6|Drew Anholt|
+15857|O|3rd|8:38|Bj Gurba|5|Sean McCarthy/Darryl Macdonald|
+15857|O|3rd|4:25|Matthew White|1|Greg Hoffort/Braydon Hart|
+15871|T|1st|17:28|Mike Leibel|4|Vaughn Labelle/Taylor Anderson|
+15871|O|1st|16:50|Taylor Edwards|4|Gerry Molvik|
+15871|O|1st|8:56|Taylor Edwards|5|Russell Wazney/Devon Downey|
+15871|T|2nd|18:21|Taylor Anderson|2|Vaughn Labelle|
+15871|O|2nd|12:52|Taylor Edwards|6|Mark Mason/Steven Chaffin|
+15871|T|2nd|9:55|Mike Leibel|5|Adam Durham/Matt Stephens|
+15871|O|2nd|9:35|Taylor Edwards|7|Marshall Plandowski|
+15871|T|2nd|7:30|Taylor Anderson|3|Vaughn Labelle/Mike Leibel|
+15871|T|3rd|12:39|Kolton Jordison|3|Mike Leibel|
+15871|T|3rd|8:47|Kyle Haugrud|4|Vaughn Labelle|
+15884|O|1st|15:05|Ryder Terpstra|1|Tyler Wiebe/Ken Terpstra|
+15884|O|1st|12:20|Lucas D'Arsie|4|Simon Leclerc|
+15884|T|1st|12:14|Kenton Haugrud|2|Kyle Haugrud/Mitch Lipon|
+15884|T|1st|7:56|Mitch Lipon|3|Kyle Haugrud/Drew Anholt|
+15884|O|1st|5:52|Simon Leclerc|2|Ken Terpstra/Wesley Kitchen|
+15884|O|2nd|18:36|Ryder Terpstra|2|Tyler Wiebe/Ken Terpstra|
+15884|O|2nd|18:03|Lucas D'Arsie|5|Dylan Wittinger/Jesse Guest|
+15884|O|2nd|12:04|Ryder Terpstra|3|Ken Terpstra|
+15884|T|2nd|11:38|Kenton Haugrud|3|Kyle Haugrud/Mitch Lipon|
+15884|O|2nd|9:08|Jesse Guest|3|Tyler Wiebe/Ken Terpstra|
+15884|T|2nd|8:44|Kenton Haugrud|4|Kyle Haugrud/Ryan Matthyssen|
+15884|T|2nd|4:26|Kenton Haugrud|5|Kyle Haugrud/Mitch Lipon|
+15906|T|1st|18:35|Taylor Anderson|4|Kyle Haugrud|
+15906|T|1st|16:11|Adam Durham|7|Kenton Haugrud|
+15906|O|1st|15:42|Tim Robinson|7|Brady Coady|
+15906|T|1st|13:31|Adam Durham|8|Adam Lamoureux/Kenton Haugrud|
+15906|T|1st|11:44|Vaughn Labelle|8|Taylor Anderson/Matthew Briens|
+15906|T|1st|10:40|Vaughn Labelle|9|Kyle Haugrud/Taylor Anderson|
+15906|O|1st|0:55|Brady Kueneman|2||
+15906|T|2nd|18:52|Taylor Anderson|5|Kyle Haugrud/Vaughn Labelle|
+15906|T|2nd|15:23|Kyle Haugrud|5|Taylor Anderson|
+15906|T|2nd|14:58|Kenton Haugrud|6|Adam Durham/Matthew Briens|
+15906|T|2nd|13:57|Adam Lamoureux|6|Kenton Haugrud/Darryl Folkerson|
+15906|T|3rd|12:30|Kyle Haugrud|6|Vaughn Labelle|SHG
+15906|O|3rd|11:20|Brady Coady|1|Myles Genyk|PPG
+15906|O|3rd|6:17|Brandin Kiist|3|Dave Ohlhauser/Brady Coady|
+15906|T|3rd|2:20|Kenton Haugrud|7|Adam Lamoureux/Adam Durham|
+15919|T|1st|18:11|Michael Kesslering|1|Darryl Folkerson/Jeff Wright|
+15919|T|1st|16:00|Luke Reimer|1|Kolton Jordison/Mike Leibel|
+15919|T|1st|13:39|Taylor Anderson|6|Evan Herbert/Luke Reimer|
+15919|O|1st|9:47|Ajay Mattu|1|Danny Faulkner/Evan Ives|
+15919|O|1st|7:04|Evan Ives|4|Danny Faulkner|
+15919|O|1st|1:37|Kyle Thompson|5|Kirkland Spencer/Nicholas Fabbro-Swizdaryk|
+15919|T|2nd|19:34|Michael Kesslering|2|Darryl Folkerson/Lee Brown|
+15919|O|2nd|13:37|Michael Balchand|4|Kirkland Spencer/Nicholas Fabbro-Swizdaryk|
+15919|T|2nd|12:01|Michael Kesslering|3|Mike Leibel/Gavin Reynolds|PPG
+15919|T|2nd|6:48|Drew Anholt|1|Michael Kesslering|
+15919|O|2nd|6:00|Kirkland Spencer|1|Evan Ives/Michael Balchand|
+15919|O|3rd|14:18|Clifton O'Brien|3|Danny Faulkner|
+15919|T|3rd|13:33|Luke Reimer|2|Kolton Jordison/Drew Anholt|
+15919|T|3rd|1:37|Darryl Folkerson|2|Drew Anholt/Mike Leibel|EN
+15919|O|3rd|0:54|Nicholas Fabbro-Swizdaryk|7|Clifton O'Brien/Terry Blanchard|
+15931|T|1st|15:49|Adam Durham|9|Kyle Haugrud/Adam Lamoureux|
+15931|O|1st|15:01|Danny Arnold|16|Logan Gabel|
+15931|O|1st|10:25|Danny Arnold|17|Mathew Lafrance/Ryan Taylor|
+15931|T|1st|10:05|Michael Kesslering|4|Luke Reimer|
+15931|O|1st|9:27|Danny Arnold|18|Dylan Salter/Alex Cartwright|
+15931|O|1st|9:05|Mathew Lafrance|7|Nolan Kwasney|
+15931|O|1st|5:54|Mitch Hagan|1|Dennis Clark|
+15931|O|1st|4:47|Danny Arnold|19|Ryan Taylor/Mathew Lafrance|
+15931|O|1st|0:59|Mathew Lafrance|8|Mitch Hagan/Nolan Kwasney|
+15931|T|2nd|19:07|Adam Lamoureux|7|Kyle Haugrud|
+15931|O|2nd|12:04|Alex Cartwright|3|Dennis Clark/Logan Gabel|
+15931|T|2nd|10:20|Ryan Matthyssen|1|Mike Leibel/Luke Reimer|
+15931|T|2nd|7:16|Mike Leibel|6|Matthew Briens|
+15931|O|2nd|1:15|Nolan Kwasney|1|Dennis Clark/Dylan Salter|
+15931|T|2nd|0:44|Luke Reimer|3|Matthew Briens/Kolton Jordison|
+15931|O|3rd|11:21|Mitch Hagan|2|Dylan Salter/Mathew Lafrance|PPG
+15931|T|3rd|0:49|Luke Reimer|4|Matthew Briens/Michael Kesslering|
+15941|O|1st|17:49|Brent Phelps|1|Tyson Trail/Greg Hoffort|
+15941|O|1st|15:02|Tyson Trail|9|Brent Phelps/Michael Sokol|
+15941|T|1st|6:20|Drew Anholt|2|Johnathan Bursey/Mitch Lipon|
+15941|O|2nd|18:23|Matthew Cook|2|Brent Phelps/Darryl Macdonald|PPG
+15941|O|2nd|16:02|Caleb Johnson|5|Darryl Macdonald|SHG
+15941|T|2nd|15:54|Ryan Matthyssen|2|Mike Leibel|PPG
+15941|T|2nd|12:15|Johnathan Bursey|4|Drew Anholt/Jeff Wright|
+15941|O|2nd|11:01|Tyson Walker|6|Joel Merkosky|
+15941|O|2nd|9:02|Brent Phelps|2|Tyson Walker/Matthew Cook|
+15941|O|2nd|8:26|Jac Roberts|8||SHG
+15941|T|2nd|7:17|Mike Leibel|7|Ryan Matthyssen/Jeff Wright|PPG
+15941|T|2nd|4:53|Jeff Wright|2|Drew Anholt/Adam Lamoureux|
+15941|T|2nd|0:46|Ryan Matthyssen|3|Johnathan Bursey/Evan Herbert|
+15941|O|3rd|12:12|Tyson Walker|7|Jean Francois Voyer|SHG
+15941|O|3rd|5:03|Tyson Walker|8|Caleb Johnson|
+15941|O|3rd|3:14|Tyson Walker|9|Taylor Johnson/Jac Roberts|
+15941|T|3rd|0:21|Mike Leibel|8||
+15952|T|1st|13:30|Vaughn Labelle|10|Matt Stephens/Adam Lamoureux|
+15952|O|1st|12:12|Steve Holford|9|Jordan Moe/Russell Wazney|
+15952|O|1st|8:46|Taylor Edwards|8||
+15952|O|1st|4:58|Steve Holford|10||
+15952|O|1st|4:29|Austin Croft|1|Russell Wazney|
+15952|O|1st|4:12|Jordan Moe|6|Marshall Plandowski|
+15952|O|1st|2:49|Austin Croft|2|Marcus Head/Devon Downey|PPG
+15952|T|2nd|19:49|Taylor Anderson|7||
+15952|T|2nd|17:30|Adam Durham|10|Luke Reimer|
+15952|O|2nd|10:25|Marshall Plandowski|12|Kevin Shaw/Cody Cross|
+15952|T|2nd|8:11|Taylor Anderson|8|Michael Kesslering/Ryan Matthyssen|
+15952|O|2nd|7:43|Marshall Plandowski|13|Kevin Shaw/Taylor Edwards|
+15952|O|2nd|2:56|Taylor Edwards|9||
+15952|O|2nd|0:13|Steve Holford|11|Jordan Moe/Marshall Plandowski|
+15952|T|3rd|14:32|Vaughn Labelle|11|Mike Leibel/Taylor Anderson|
+15952|T|3rd|12:24|Michael Kesslering|5|Luke Reimer/Adam Durham|
+15952|T|3rd|4:45|Mike Leibel|9||
+15952|O|3rd|2:09|Steve Holford|12|Russell Wazney/Jordan Moe|

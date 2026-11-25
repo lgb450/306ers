@@ -1,0 +1,4 @@
+1|Gavin Reynolds|10|6|4|0|70|7.00|0
+0|Thomas Burke|2|0|2|0|13|6.50|0
+30|Connor Fox|0|0|0|0|0|0.00|0
+35|Austin Demmans|0|0|0|0|0|0.00|0

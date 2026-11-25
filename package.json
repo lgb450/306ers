@@ -1,0 +1,13 @@
+{
+  "name": "306ers-hockey",
+  "private": true,
+  "description": "Stats site for the 306ers. Node is only used by the automatic CMHA refresh.",
+  "type": "module",
+  "engines": { "node": ">=20" },
+  "scripts": {
+    "refresh": "node scripts/refresh_cmha.mjs"
+  },
+  "dependencies": {
+    "jsdom": "^26.1.0"
+  }
+}

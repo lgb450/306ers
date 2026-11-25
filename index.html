@@ -1,0 +1,466 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>306ers Hockey</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@500;600;700&family=Barlow:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+/* Layout idea: a game-sheet. Big condensed numerals, ruled rows, one goal-light red accent, one blue for magnitude. */
+:root{
+  /* Logo palette: wheat green #087838 and gold #F8C008 */
+  --bg:#f3f7f3; --surface:#ffffff; --ink:#0f2418; --muted:#586a5f; --line:#d8e3da;
+  --brand:#087838; --accent:#f8c008; --heat:#087838; --good:#0b8a42; --mid:#f8c008; --bad:#d6453b; --them:#8a9a90;
+  --display:"Barlow Condensed","Arial Narrow",system-ui,sans-serif; --body:"Barlow",system-ui,-apple-system,"Segoe UI",sans-serif;
+  color-scheme:light;
+}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){
+  --bg:#08130d; --surface:#0f1f16; --ink:#e8f1ea; --muted:#9bb0a2; --line:#21392b;
+  --brand:#0a5a2b; --accent:#f8c008; --heat:#3fbf74; --good:#3fbf74; --mid:#e6b422; --bad:#ff7a70; --them:#7f9487; color-scheme:dark;}}
+:root[data-theme="dark"]{
+  --bg:#08130d; --surface:#0f1f16; --ink:#e8f1ea; --muted:#9bb0a2; --line:#21392b;
+  --brand:#0a5a2b; --accent:#f8c008; --heat:#3fbf74; --good:#3fbf74; --mid:#e6b422; --bad:#ff7a70; --them:#7f9487; color-scheme:dark;}
+*{box-sizing:border-box}
+html{-webkit-text-size-adjust:100%}
+body{margin:0;background:var(--bg);color:var(--ink);font:16px/1.5 var(--body);font-variant-numeric:tabular-nums}
+a{color:var(--heat)}
+h1,h2,h3{font-family:var(--display);font-weight:700;letter-spacing:.01em;margin:0;text-wrap:balance}
+h2{font-size:1.9rem;line-height:1.1}
+h3{font-size:1.2rem;text-transform:uppercase;letter-spacing:.06em;color:var(--muted);font-weight:600}
+.wrap{max-width:1080px;margin:0 auto;padding:0 16px}
+header.top{background:var(--brand);color:#fff;border-bottom:5px solid var(--accent)}
+.top .wrap{display:flex;gap:16px 28px;flex-wrap:wrap;align-items:flex-end;justify-content:space-between;padding-top:20px;padding-bottom:16px}
+.brand{font-family:var(--display);font-weight:700;font-size:3.4rem;line-height:.9;letter-spacing:.01em}
+.brand small{display:block;font-size:1rem;font-weight:500;letter-spacing:.14em;text-transform:uppercase;opacity:.75;margin-top:6px}
+.rec{display:flex;gap:22px;flex-wrap:wrap}
+.rec div{font-family:var(--display);text-transform:uppercase;letter-spacing:.08em;font-size:.85rem;opacity:.95}
+.rec b{display:block;font-size:2.1rem;letter-spacing:0;line-height:1;font-weight:700}
+nav.tabs{background:var(--surface);border-bottom:1px solid var(--line);position:sticky;top:0;z-index:5}
+nav.tabs .wrap{display:flex;gap:4px;overflow-x:auto;padding-top:0;padding-bottom:0}
+nav.tabs a{font-family:var(--display);font-weight:600;font-size:1.15rem;letter-spacing:.06em;text-transform:uppercase;color:var(--muted);text-decoration:none;padding:12px 14px;border-bottom:3px solid transparent;white-space:nowrap}
+nav.tabs a[aria-current="page"]{color:var(--ink);border-bottom-color:var(--accent)}
+nav.tabs a:focus-visible,button:focus-visible,summary:focus-visible,th button:focus-visible{outline:3px solid var(--heat);outline-offset:-3px}
+main{padding:24px 0 56px}
+section.view{display:none}
+section.view.on{display:block}
+.grid{display:grid;gap:16px}
+.g2{grid-template-columns:repeat(auto-fit,minmax(300px,1fr))}
+.g3{grid-template-columns:repeat(auto-fit,minmax(200px,1fr))}
+.card{background:var(--surface);border:1px solid var(--line);border-radius:6px;padding:16px;min-width:0}
+.card h3{margin-bottom:10px}
+.lede{color:var(--muted);max-width:68ch;margin:6px 0 20px}
+.note{color:var(--muted);font-size:.88rem;max-width:78ch;margin:12px 0 0}
+.stack{display:flex;flex-direction:column;gap:16px}
+.tile b{display:block;font-family:var(--display);font-size:2.6rem;line-height:1;font-weight:700}
+.tile span{color:var(--muted);font-size:.9rem}
+.pill{display:inline-block;min-width:1.7em;text-align:center;font-family:var(--display);font-weight:700;font-size:.95rem;letter-spacing:.04em;padding:1px 7px;border-radius:3px;color:#fff}
+.pill.W{background:var(--good)} .pill.L{background:var(--bad)} .pill.up{background:transparent;color:var(--muted);border:1px solid var(--line)}
+.strip{display:flex;gap:8px;flex-wrap:wrap}
+.strip .g{border:1px solid var(--line);border-radius:6px;padding:8px 10px;min-width:104px;background:var(--bg)}
+.strip .g small{display:block;color:var(--muted);font-size:.78rem;line-height:1.2}
+.strip .g b{font-family:var(--display);font-size:1.3rem}
+.next{display:grid;gap:4px}
+.next .big{font-family:var(--display);font-size:2.2rem;font-weight:700;line-height:1}
+.next .when{color:var(--muted)}
+ol.rank,ul.plain{list-style:none;margin:0;padding:0}
+ol.rank li{display:flex;justify-content:space-between;gap:12px;padding:6px 0;border-top:1px solid var(--line)}
+ol.rank li:first-child{border-top:0}
+ol.rank .n{font-family:var(--display);font-weight:700;font-size:1.25rem}
+.tablewrap{overflow-x:auto;border:1px solid var(--line);border-radius:6px;background:var(--surface)}
+table{border-collapse:collapse;width:100%;font-size:.95rem}
+th,td{padding:7px 10px;text-align:right;white-space:nowrap;border-bottom:1px solid var(--line)}
+th:first-child,td:first-child{text-align:left}
+th.l,td.l{text-align:left}
+thead th{font-family:var(--display);text-transform:uppercase;letter-spacing:.06em;font-weight:600;color:var(--muted);font-size:.95rem;background:var(--surface);position:sticky;top:0}
+th button{all:unset;cursor:pointer;display:block;width:100%;text-align:inherit}
+th[aria-sort] button::after{content:" ▼";font-size:.7em;color:var(--heat)}
+th[aria-sort="ascending"] button::after{content:" ▲"}
+tbody tr:last-child td{border-bottom:0}
+tr.sep td{background:var(--bg);font-family:var(--display);text-transform:uppercase;letter-spacing:.08em;color:var(--muted);font-size:.85rem}
+td.pl{font-weight:600}
+td.num{font-family:var(--display);font-size:1.1rem}
+.tag{font-size:.72rem;font-weight:600;letter-spacing:.06em;text-transform:uppercase;color:var(--muted);border:1px solid var(--line);border-radius:3px;padding:0 4px;margin-left:6px}
+.boxes{display:inline-flex;gap:2px;vertical-align:middle}
+.boxes i{display:block;width:10px;height:18px;border-radius:2px;background:var(--surface);border:1px solid var(--line)}
+.boxes i.b1{background:var(--mid);border-color:var(--mid)}
+.boxes i.b2{background:var(--good);border-color:var(--good)}
+.sw.b0{background:var(--surface);border:1px solid var(--line)} .sw.b1{background:var(--mid)} .sw.b2{background:var(--good)}
+td.sc{font-family:var(--display);font-size:1.1rem}
+h3 a.jump{color:inherit;text-decoration:none;border-bottom:2px solid var(--accent)}
+h3 a.jump:hover{color:var(--heat)}
+h3 a.jump::after{content:" \2192"}
+.legend{display:flex;gap:14px;flex-wrap:wrap;align-items:center;color:var(--muted);font-size:.85rem;margin:8px 0}
+.legend .sw{display:inline-block;width:12px;height:12px;border-radius:2px;vertical-align:-1px;margin-right:5px}
+.ctl{display:flex;gap:8px;flex-wrap:wrap;margin:0 0 12px}
+.ctl button{font:600 .95rem var(--body);background:var(--surface);color:var(--ink);border:1px solid var(--line);border-radius:4px;padding:6px 12px;cursor:pointer}
+.ctl button[aria-pressed="true"]{background:var(--ink);color:var(--bg);border-color:var(--ink)}
+.matrix td,.matrix th{padding:0;border:0;text-align:center}
+.matrix .cell{width:30px;height:28px;font-family:var(--display);font-size:1rem;display:flex;align-items:center;justify-content:center;margin:1px;border-radius:2px;background:color-mix(in srgb,var(--heat) calc(var(--t)*100%),var(--bg));color:var(--ink)}
+.matrix .cell.on{color:#fff}
+.matrix .cell.z{background:transparent}
+.matrix .rowh{position:sticky;left:0;background:var(--surface);text-align:right;padding:0 8px;font-size:.85rem;white-space:nowrap;z-index:1;min-width:150px}
+.matrix .colh{height:132px;vertical-align:bottom;font-size:.85rem}
+.matrix .colh span{display:block;writing-mode:vertical-rl;transform:rotate(180deg);white-space:nowrap;margin:0 auto 4px;font-weight:500}
+.matrix .tot{font-family:var(--display);color:var(--muted);font-size:.95rem;padding:0 8px}
+.matrix .cell.self{background:#000;outline:1px solid var(--line)}
+.matrix th.hl{background:var(--accent);color:#0f2418}
+.matrix .rowh.hl{background:var(--accent)}
+.matrix .axis{font-family:var(--display);text-transform:uppercase;letter-spacing:.08em;color:var(--muted);font-size:.9rem;padding:4px 8px}
+.matrix .axis.c{text-align:center;border-bottom:1px solid var(--line)}
+.matrix .corner{vertical-align:bottom;text-align:right;padding:0 8px 6px;font-family:var(--display);text-transform:uppercase;letter-spacing:.08em;color:var(--muted);font-size:.9rem;position:sticky;left:0;background:var(--surface);z-index:1}
+.how{background:color-mix(in srgb,var(--accent) 16%,var(--surface));border:1px solid color-mix(in srgb,var(--accent) 55%,var(--line));border-radius:6px;padding:10px 14px;margin:0 0 14px;max-width:80ch}
+.scale{display:inline-flex;align-items:center;gap:4px}
+.scale i{display:inline-block;width:18px;height:12px;border-radius:2px;background:color-mix(in srgb,var(--heat) calc(var(--t)*100%),var(--bg))}
+.bars{display:grid;gap:6px}
+.bar{display:grid;grid-template-columns:150px 1fr 44px;gap:8px;align-items:center;font-size:.92rem}
+.bar .track{display:flex;height:12px;background:var(--bg);border-radius:2px;overflow:hidden;gap:2px}
+.bar .track i{display:block;height:100%}
+.bar .v{font-family:var(--display);text-align:right;font-size:1.05rem}
+.gcard{background:var(--surface);border:1px solid var(--line);border-left:5px solid var(--bad);border-radius:6px;padding:14px 16px}
+.gcard.W{border-left-color:var(--good)}
+.gcard .hd{display:flex;gap:10px 16px;flex-wrap:wrap;align-items:baseline;justify-content:space-between}
+.gcard .sc{font-family:var(--display);font-size:2rem;font-weight:700;line-height:1}
+.gcard .meta{color:var(--muted);font-size:.9rem}
+.gcard h3.head{text-transform:none;letter-spacing:0;color:var(--ink);font-size:1.45rem;margin:6px 0 4px}
+.gcard p{margin:0 0 8px;max-width:70ch}
+details summary{cursor:pointer;font-weight:600;color:var(--heat);padding:4px 0}
+.log{margin:8px 0 0;font-size:.9rem}
+.log li{display:grid;grid-template-columns:70px 1fr;gap:8px;padding:3px 0;border-top:1px solid var(--line)}
+.log .us{font-weight:600}
+.log .them{color:var(--muted)}
+.log small{color:var(--muted)}
+.per{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-top:28px}
+.pcol{display:grid;gap:6px}
+.pcol .pair{display:flex;align-items:flex-end;gap:6px;height:130px}
+.pcol .pair i{display:block;flex:1;border-radius:2px 2px 0 0;position:relative;min-height:2px}
+.pcol .pair i b{position:absolute;top:-1.35em;left:0;right:0;text-align:center;font-family:var(--display);font-size:1rem;font-weight:600}
+.pcol .lab{text-align:center;font-family:var(--display);text-transform:uppercase;letter-spacing:.06em;color:var(--muted)}
+.us-c{background:var(--heat)} .them-c{background:var(--them)}
+.tip{position:fixed;z-index:20;pointer-events:none;background:var(--ink);color:var(--bg);font-size:.85rem;padding:6px 9px;border-radius:4px;max-width:260px;box-shadow:0 4px 14px rgba(0,0,0,.25);display:none}
+.hot{color:var(--good);font-weight:700}
+.sub{color:var(--muted);font-weight:400}
+footer{border-top:1px solid var(--line);color:var(--muted);font-size:.85rem;padding:18px 0 40px}
+@media (max-width:560px){
+  .brand{font-size:2.6rem}
+  .bar{grid-template-columns:110px 1fr 36px}
+  .matrix .rowh{min-width:118px;font-size:.8rem}
+}
+@media (prefers-reduced-motion:reduce){*{scroll-behavior:auto!important;transition:none!important}}
+</style>
+</head>
+<body>
+<header class="top"><div class="wrap">
+  <div class="brand">306ers<small id="sub"></small></div>
+  <div class="rec" id="rec"></div>
+</div></header>
+<nav class="tabs" aria-label="Sections"><div class="wrap" id="tabs"></div></nav>
+<main class="wrap">
+  <section class="view" id="v-overview"></section>
+  <section class="view" id="v-player-stats"></section>
+  <section class="view" id="v-connections"></section>
+  <section class="view" id="v-trends"></section>
+  <section class="view" id="v-game-recaps"></section>
+  <section class="view" id="v-schedule"></section>
+</main>
+<footer><div class="wrap">
+  Numbers come from the public CMHA pages (team stats, schedule and game summaries) through game <span id="asof-n"></span>, <span id="asof-d"></span>. Skater totals computed from the game summaries match the CMHA stats page. <span id="nosum"></span> CMHA does not publish who dressed for each game, so a 0 for a player in a game can mean a quiet night or a night off.
+</div></footer>
+<div class="tip" id="tip" role="tooltip"></div>
+<script id="data" type="application/json">{"sched":[{"n":1,"date":"2026-09-21","time":"9:15 PM","arena":"GB","ha":"H","opp":"Blackout","res":"W","gf":10,"ga":5,"gid":"15779"},{"n":2,"date":"2026-09-27","time":"2:45 PM","arena":"SL","ha":"H","opp":"Colts","res":"W","gf":1,"ga":0,"gid":""},{"n":3,"date":"2026-10-09","time":"8:15 PM","arena":"FM","ha":"H","opp":"Ice Goats","res":"W","gf":10,"ga":7,"gid":"15821"},{"n":4,"date":"2026-10-10","time":"7:30 PM","arena":"OP","ha":"A","opp":"Smokin Guns","res":"W","gf":10,"ga":3,"gid":"15826"},{"n":5,"date":"2026-10-18","time":"4:45 PM","arena":"ES","ha":"A","opp":"Ducks 4","res":"L","gf":3,"ga":6,"gid":"15842"},{"n":6,"date":"2026-10-24","time":"7:45 PM","arena":"GB","ha":"A","opp":"Mustangs","res":"L","gf":7,"ga":9,"gid":"15857"},{"n":7,"date":"2026-10-25","time":"8:15 PM","arena":"SH","ha":"A","opp":"Blackout","res":"W","gf":6,"ga":4,"gid":"15871"},{"n":8,"date":"2026-10-31","time":"4:15 PM","arena":"RK","ha":"A","opp":"Colts","res":"L","gf":5,"ga":7,"gid":"15884"},{"n":9,"date":"2026-11-07","time":"4:15 PM","arena":"RK","ha":"A","opp":"Ice Goats","res":"W","gf":11,"ga":4,"gid":"15906"},{"n":10,"date":"2026-11-10","time":"8:45 PM","arena":"FM","ha":"H","opp":"Smokin Guns","res":"W","gf":8,"ga":7,"gid":"15919"},{"n":11,"date":"2026-11-15","time":"6:30 PM","arena":"ES","ha":"H","opp":"Ducks 4","res":"L","gf":7,"ga":10,"gid":"15931"},{"n":12,"date":"2026-11-17","time":"8:45 PM","arena":"FM","ha":"H","opp":"Mustangs","res":"L","gf":7,"ga":10,"gid":"15941"},{"n":13,"date":"2026-11-22","time":"6:30 PM","arena":"ES","ha":"H","opp":"Blackout","res":"L","gf":7,"ga":11,"gid":"15952"},{"n":14,"date":"2026-11-28","time":"7:30 PM","arena":"OP","ha":"H","opp":"Colts","res":"","gf":null,"ga":null,"gid":"15969"},{"n":15,"date":"2026-12-05","time":"4:15 PM","arena":"RK","ha":"H","opp":"Ice Goats","res":"","gf":null,"ga":null,"gid":"15992"},{"n":16,"date":"2026-12-06","time":"6:30 PM","arena":"SH","ha":"A","opp":"Smokin Guns","res":"","gf":null,"ga":null,"gid":"16000"},{"n":17,"date":"2026-12-13","time":"10:00 PM","arena":"ES","ha":"A","opp":"Ducks 4","res":"","gf":null,"ga":null,"gid":"16019"},{"n":18,"date":"2026-12-19","time":"7:45 PM","arena":"GB","ha":"A","opp":"Mustangs","res":"","gf":null,"ga":null,"gid":"16031"},{"n":19,"date":"2026-12-20","time":"6:30 PM","arena":"SH","ha":"A","opp":"Blackout","res":"","gf":null,"ga":null,"gid":"16044"},{"n":20,"date":"2027-01-02","time":"8:15 PM","arena":"VS","ha":"A","opp":"Colts","res":"","gf":null,"ga":null,"gid":"16050"},{"n":21,"date":"2027-01-17","time":"4:15 PM","arena":"OP","ha":"A","opp":"Ice Goats","res":"","gf":null,"ga":null,"gid":"16080"},{"n":22,"date":"2027-01-23","time":"7:30 PM","arena":"OP","ha":"H","opp":"Smokin Guns","res":"","gf":null,"ga":null,"gid":"16093"},{"n":23,"date":"2027-01-26","time":"8:00 PM","arena":"NB","ha":"H","opp":"Ducks 4","res":"","gf":null,"ga":null,"gid":"16109"},{"n":24,"date":"2027-01-31","time":"6:30 PM","arena":"SH","ha":"H","opp":"Mustangs","res":"","gf":null,"ga":null,"gid":"16124"},{"n":25,"date":"2027-02-06","time":"8:15 PM","arena":"VS","ha":"H","opp":"Blackout","res":"","gf":null,"ga":null,"gid":"16138"},{"n":26,"date":"2027-02-13","time":"7:45 PM","arena":"GB","ha":"H","opp":"Colts","res":"","gf":null,"ga":null,"gid":"16155"},{"n":27,"date":"2027-02-23","time":"8:45 PM","arena":"FM","ha":"H","opp":"Ice Goats","res":"","gf":null,"ga":null,"gid":"16185"},{"n":28,"date":"2027-02-28","time":"10:00 PM","arena":"ES","ha":"A","opp":"Smokin Guns","res":"","gf":null,"ga":null,"gid":"16199"},{"n":29,"date":"2027-03-06","time":"7:30 PM","arena":"OP","ha":"A","opp":"Ducks 4","res":"","gf":null,"ga":null,"gid":"16214"},{"n":30,"date":"2027-03-09","time":"8:45 PM","arena":"FM","ha":"A","opp":"Mustangs","res":"","gf":null,"ga":null,"gid":"16229"},{"n":31,"date":"2027-03-14","time":"10:00 PM","arena":"ES","ha":"H","opp":"Blackout","res":"","gf":null,"ga":null,"gid":"16243"},{"n":32,"date":"2027-03-20","time":"9:15 PM","arena":"OP","ha":"A","opp":"Colts","res":"","gf":null,"ga":null,"gid":"16259"}],"arenas":{"GB":"George Blundun","SL":"Southland","FM":"Frank McCool","OP":"Optimist","ES":"Ernie Starr","SH":"Stew Hendry","RK":"Rose Kohn","VS":"Village Square","NB":"Norma Bush"},"players":[{"name":"Thomas Burke","num":0,"gp":2,"g":0,"a":0,"pts":0,"pp":0,"sh":0,"pim":0,"a1":0,"a2":0,"ug":0,"by":[0,0,0,0,0,0,0,0,0,0,0,0],"gby":[0,0,0,0,0,0,0,0,0,0,0,0],"streak":0,"since":null,"last5":0},{"name":"Chris Mills","num":0,"gp":1,"g":0,"a":0,"pts":0,"pp":0,"sh":0,"pim":0,"a1":0,"a2":0,"ug":0,"by":[0,0,0,0,0,0,0,0,0,0,0,0],"gby":[0,0,0,0,0,0,0,0,0,0,0,0],"streak":0,"since":null,"last5":0},{"name":"Evan Herbert","num":3,"gp":3,"g":0,"a":2,"pts":2,"pp":0,"sh":0,"pim":0,"a1":1,"a2":1,"ug":0,"by":[0,0,0,0,0,0,0,0,1,0,1,0],"gby":[0,0,0,0,0,0,0,0,0,0,0,0],"streak":0,"since":null,"last5":2},{"name":"Lee Brown","num":23,"gp":8,"g":0,"a":2,"pts":2,"pp":0,"sh":0,"pim":6,"a1":0,"a2":2,"ug":0,"by":[1,0,0,0,0,0,0,0,1,0,0,0],"gby":[0,0,0,0,0,0,0,0,0,0,0,0],"streak":0,"since":null,"last5":1},{"name":"Gavin Reynolds","num":1,"gp":10,"g":0,"a":2,"pts":2,"pp":0,"sh":0,"pim":0,"a1":0,"a2":2,"ug":0,"by":[1,0,0,0,0,0,0,0,1,0,0,0],"gby":[0,0,0,0,0,0,0,0,0,0,0,0],"streak":0,"since":null,"last5":1},{"name":"Matt McIntyre","num":7,"gp":3,"g":2,"a":2,"pts":4,"pp":0,"sh":0,"pim":0,"a1":2,"a2":0,"ug":0,"by":[1,0,0,0,3,0,0,0,0,0,0,0],"gby":[1,0,0,0,1,0,0,0,0,0,0,0],"streak":0,"since":7,"last5":0},{"name":"Bryce Schneider","num":0,"gp":1,"g":3,"a":1,"pts":4,"pp":0,"sh":1,"pim":0,"a1":0,"a2":1,"ug":1,"by":[0,0,4,0,0,0,0,0,0,0,0,0],"gby":[0,0,3,0,0,0,0,0,0,0,0,0],"streak":0,"since":9,"last5":0},{"name":"Matt Stephens","num":24,"gp":5,"g":0,"a":6,"pts":6,"pp":0,"sh":0,"pim":4,"a1":1,"a2":5,"ug":0,"by":[1,2,0,1,0,1,0,0,0,0,0,1],"gby":[0,0,0,0,0,0,0,0,0,0,0,0],"streak":1,"since":null,"last5":1},{"name":"Matthew Briens","num":14,"gp":4,"g":0,"a":6,"pts":6,"pp":0,"sh":0,"pim":4,"a1":3,"a2":3,"ug":0,"by":[1,0,0,0,0,0,0,2,0,3,0,0],"gby":[0,0,0,0,0,0,0,0,0,0,0,0],"streak":0,"since":null,"last5":5},{"name":"Jeff Wright","num":44,"gp":4,"g":2,"a":5,"pts":7,"pp":0,"sh":0,"pim":0,"a1":2,"a2":3,"ug":0,"by":[0,3,0,0,0,0,0,0,1,0,3,0],"gby":[0,1,0,0,0,0,0,0,0,0,1,0],"streak":0,"since":1,"last5":4},{"name":"Ryan Matthyssen","num":11,"gp":5,"g":3,"a":4,"pts":7,"pp":1,"sh":0,"pim":2,"a1":1,"a2":3,"ug":0,"by":[0,0,0,0,1,0,1,0,0,1,3,1],"gby":[0,0,0,0,0,0,0,0,0,1,2,0],"streak":3,"since":1,"last5":5},{"name":"Darryl Folkerson","num":54,"gp":6,"g":2,"a":6,"pts":8,"pp":0,"sh":0,"pim":6,"a1":3,"a2":3,"ug":1,"by":[1,0,2,1,0,0,0,1,3,0,0,0],"gby":[0,0,0,1,0,0,0,0,1,0,0,0],"streak":0,"since":3,"last5":4},{"name":"Michael Kesslering","num":90,"gp":4,"g":5,"a":3,"pts":8,"pp":1,"sh":0,"pim":0,"a1":2,"a2":1,"ug":0,"by":[0,0,0,0,0,0,0,0,4,2,0,2],"gby":[0,0,0,0,0,0,0,0,3,1,0,1],"streak":1,"since":0,"last5":8},{"name":"Mitch Lipon","num":6,"gp":4,"g":3,"a":6,"pts":9,"pp":0,"sh":0,"pim":2,"a1":1,"a2":5,"ug":0,"by":[0,1,3,0,0,0,4,0,0,0,1,0],"gby":[0,1,1,0,0,0,1,0,0,0,0,0],"streak":0,"since":5,"last5":1},{"name":"Johnathan Bursey","num":0,"gp":2,"g":4,"a":5,"pts":9,"pp":1,"sh":0,"pim":4,"a1":5,"a2":0,"ug":1,"by":[0,6,0,0,0,0,0,0,0,0,3,0],"gby":[0,3,0,0,0,0,0,0,0,0,1,0],"streak":0,"since":1,"last5":3},{"name":"Drew Anholt","num":9,"gp":10,"g":2,"a":9,"pts":11,"pp":0,"sh":0,"pim":2,"a1":5,"a2":4,"ug":0,"by":[2,0,1,0,1,0,1,0,3,0,3,0],"gby":[0,0,0,0,0,0,0,0,1,0,1,0],"streak":0,"since":1,"last5":6},{"name":"Kolton Jordison","num":45,"gp":7,"g":3,"a":8,"pts":11,"pp":0,"sh":0,"pim":0,"a1":4,"a2":4,"ug":0,"by":[2,5,0,0,0,1,0,0,2,1,0,0],"gby":[0,2,0,0,0,1,0,0,0,0,0,0],"streak":0,"since":6,"last5":3},{"name":"Luke Reimer","num":15,"gp":6,"g":4,"a":7,"pts":11,"pp":0,"sh":0,"pim":2,"a1":5,"a2":2,"ug":0,"by":[0,0,0,0,2,0,0,0,3,4,0,2],"gby":[0,0,0,0,0,0,0,0,2,2,0,0],"streak":1,"since":2,"last5":9},{"name":"Kenton Haugrud","num":17,"gp":4,"g":7,"a":5,"pts":12,"pp":0,"sh":0,"pim":2,"a1":4,"a2":1,"ug":0,"by":[0,1,2,0,0,0,4,5,0,0,0,0],"gby":[0,0,1,0,0,0,4,2,0,0,0,0],"streak":0,"since":4,"last5":5},{"name":"Taylor Anderson","num":73,"gp":7,"g":8,"a":9,"pts":17,"pp":0,"sh":0,"pim":0,"a1":5,"a2":4,"ug":1,"by":[3,0,0,1,1,3,0,5,1,0,0,3],"gby":[0,0,0,0,1,2,0,2,1,0,0,2],"streak":1,"since":0,"last5":9},{"name":"Adam Lamoureux","num":16,"gp":10,"g":7,"a":11,"pts":18,"pp":0,"sh":0,"pim":4,"a1":6,"a2":5,"ug":1,"by":[4,2,3,1,1,0,0,3,0,2,1,1],"gby":[1,1,1,1,1,0,0,1,0,1,0,0],"streak":3,"since":2,"last5":7},{"name":"Vaughn Labelle","num":8,"gp":8,"g":11,"a":7,"pts":18,"pp":0,"sh":0,"pim":0,"a1":6,"a2":1,"ug":1,"by":[3,0,4,1,0,4,0,4,0,0,0,2],"gby":[3,0,3,1,0,0,0,2,0,0,0,2],"streak":1,"since":0,"last5":6},{"name":"Mike Leibel","num":4,"gp":8,"g":9,"a":10,"pts":19,"pp":1,"sh":0,"pim":6,"a1":5,"a2":5,"ug":2,"by":[2,0,3,0,0,4,0,0,3,2,3,2],"gby":[2,0,1,0,0,2,0,0,0,1,2,1],"streak":4,"since":0,"last5":10},{"name":"Kyle Haugrud","num":91,"gp":7,"g":6,"a":14,"pts":20,"pp":0,"sh":1,"pim":0,"a1":13,"a2":1,"ug":1,"by":[3,0,0,0,4,1,5,5,0,2,0,0],"gby":[1,0,0,0,2,1,0,2,0,0,0,0],"streak":0,"since":4,"last5":7},{"name":"Adam Durham","num":55,"gp":9,"g":10,"a":11,"pts":21,"pp":0,"sh":0,"pim":0,"a1":7,"a2":4,"ug":1,"by":[2,4,4,0,3,1,0,4,0,1,0,2],"gby":[2,2,0,0,2,0,0,2,0,1,0,1],"streak":1,"since":0,"last5":7}],"goalies":[{"name":"Gavin Reynolds","num":1,"gp":10,"w":6,"l":4,"t":0,"ga":70,"gaa":7.0,"so":0},{"name":"Thomas Burke","num":0,"gp":2,"w":0,"l":2,"t":0,"ga":13,"gaa":6.5,"so":0}],"order":["Adam Durham","Kyle Haugrud","Mike Leibel","Adam Lamoureux","Vaughn Labelle","Taylor Anderson","Kenton Haugrud","Drew Anholt","Kolton Jordison","Luke Reimer","Johnathan Bursey","Mitch Lipon","Darryl Folkerson","Michael Kesslering","Jeff Wright","Ryan Matthyssen","Matt Stephens","Matthew Briens","Bryce Schneider","Matt McIntyre","Evan Herbert","Gavin Reynolds","Lee Brown"],"cells":{"Adam Lamoureux>Vaughn Labelle":[2,2],"Drew Anholt>Vaughn Labelle":[0,1],"Kyle Haugrud>Adam Lamoureux":[2,0],"Gavin Reynolds>Adam Lamoureux":[0,1],"Kolton Jordison>Mike Leibel":[1,0],"Taylor Anderson>Mike Leibel":[0,2],"Taylor Anderson>Vaughn Labelle":[4,2],"Kolton Jordison>Vaughn Labelle":[0,1],"Drew Anholt>Adam Durham":[2,0],"Matthew Briens>Adam Durham":[0,1],"Kyle Haugrud>Matt McIntyre":[2,0],"Adam Lamoureux>Matt McIntyre":[0,1],"Adam Lamoureux>Kyle Haugrud":[1,0],"Lee Brown>Kyle Haugrud":[0,1],"Darryl Folkerson>Mike Leibel":[1,0],"Matt Stephens>Mike Leibel":[0,2],"Adam Durham>Johnathan Bursey":[1,0],"Kolton Jordison>Johnathan Bursey":[0,1],"Jeff Wright>Kolton Jordison":[1,0],"Kenton Haugrud>Adam Durham":[2,1],"Matt Stephens>Adam Durham":[0,1],"Johnathan Bursey>Adam Lamoureux":[1,0],"Adam Durham>Adam Lamoureux":[0,2],"Kolton Jordison>Jeff Wright":[1,0],"Johnathan Bursey>Mitch Lipon":[1,0],"Kolton Jordison>Mitch Lipon":[0,1],"Adam Lamoureux>Kolton Jordison":[1,0],"Matt Stephens>Kolton Jordison":[0,1],"Jeff Wright>Johnathan Bursey":[1,1],"Johnathan Bursey>Adam Durham":[1,0],"Adam Durham>Bryce Schneider":[2,0],"Darryl Folkerson>Bryce Schneider":[0,1],"Mitch Lipon>Vaughn Labelle":[1,0],"Mike Leibel>Vaughn Labelle":[1,1],"Adam Durham>Kenton Haugrud":[2,1],"Bryce Schneider>Kenton Haugrud":[0,1],"Mike Leibel>Bryce Schneider":[0,1],"Kenton Haugrud>Mitch Lipon":[1,0],"Darryl Folkerson>Mitch Lipon":[0,1],"Vaughn Labelle>Adam Lamoureux":[1,0],"Mitch Lipon>Adam Lamoureux":[0,1],"Adam Durham>Mike Leibel":[2,0],"Drew Anholt>Mike Leibel":[0,1],"Matt Stephens>Vaughn Labelle":[1,1],"Matt McIntyre>Taylor Anderson":[1,0],"Kyle Haugrud>Taylor Anderson":[2,1],"Luke Reimer>Adam Durham":[2,0],"Luke Reimer>Adam Lamoureux":[1,0],"Matt McIntyre>Kyle Haugrud":[1,0],"Ryan Matthyssen>Kyle Haugrud":[0,1],"Vaughn Labelle>Mike Leibel":[1,0],"Vaughn Labelle>Taylor Anderson":[2,1],"Mike Leibel>Taylor Anderson":[0,1],"Mike Leibel>Kolton Jordison":[1,0],"Vaughn Labelle>Kyle Haugrud":[2,0],"Kyle Haugrud>Kenton Haugrud":[4,0],"Mitch Lipon>Kenton Haugrud":[0,3],"Kyle Haugrud>Mitch Lipon":[1,0],"Drew Anholt>Mitch Lipon":[0,1],"Ryan Matthyssen>Kenton Haugrud":[0,1],"Adam Lamoureux>Adam Durham":[1,1],"Matthew Briens>Vaughn Labelle":[0,1],"Kyle Haugrud>Vaughn Labelle":[1,0],"Taylor Anderson>Kyle Haugrud":[1,0],"Matthew Briens>Kenton Haugrud":[0,1],"Kenton Haugrud>Adam Lamoureux":[1,0],"Darryl Folkerson>Adam Lamoureux":[0,1],"Adam Lamoureux>Kenton Haugrud":[1,0],"Darryl Folkerson>Michael Kesslering":[2,0],"Jeff Wright>Michael Kesslering":[0,1],"Kolton Jordison>Luke Reimer":[2,1],"Mike Leibel>Luke Reimer":[0,1],"Evan Herbert>Taylor Anderson":[1,0],"Luke Reimer>Taylor Anderson":[0,1],"Lee Brown>Michael Kesslering":[0,1],"Mike Leibel>Michael Kesslering":[1,0],"Gavin Reynolds>Michael Kesslering":[0,1],"Michael Kesslering>Drew Anholt":[1,0],"Drew Anholt>Luke Reimer":[0,1],"Drew Anholt>Darryl Folkerson":[1,0],"Mike Leibel>Darryl Folkerson":[0,1],"Kyle Haugrud>Adam Durham":[1,0],"Luke Reimer>Michael Kesslering":[2,0],"Mike Leibel>Ryan Matthyssen":[2,0],"Luke Reimer>Ryan Matthyssen":[0,1],"Matthew Briens>Mike Leibel":[1,0],"Matthew Briens>Luke Reimer":[2,0],"Michael Kesslering>Luke Reimer":[0,1],"Johnathan Bursey>Drew Anholt":[1,0],"Mitch Lipon>Drew Anholt":[0,1],"Drew Anholt>Johnathan Bursey":[1,0],"Ryan Matthyssen>Mike Leibel":[1,0],"Jeff Wright>Mike Leibel":[0,1],"Drew Anholt>Jeff Wright":[1,0],"Adam Lamoureux>Jeff Wright":[0,1],"Johnathan Bursey>Ryan Matthyssen":[1,0],"Evan Herbert>Ryan Matthyssen":[0,1],"Michael Kesslering>Taylor Anderson":[1,0],"Ryan Matthyssen>Taylor Anderson":[0,1],"Adam Durham>Michael Kesslering":[0,1]},"trios":[{"p":["Mike Leibel","Taylor Anderson","Vaughn Labelle"],"n":3},{"p":["Kenton Haugrud","Kyle Haugrud","Mitch Lipon"],"n":3},{"p":["Adam Lamoureux","Mitch Lipon","Vaughn Labelle"],"n":2},{"p":["Adam Durham","Adam Lamoureux","Kenton Haugrud"],"n":2},{"p":["Kyle Haugrud","Taylor Anderson","Vaughn Labelle"],"n":2},{"p":["Adam Lamoureux","Drew Anholt","Vaughn Labelle"],"n":1},{"p":["Adam Lamoureux","Gavin Reynolds","Kyle Haugrud"],"n":1},{"p":["Kolton Jordison","Mike Leibel","Taylor Anderson"],"n":1}],"hat":{"T":[{"n":1,"name":"Vaughn Labelle","goals":3,"opp":"Blackout"},{"n":3,"name":"Johnathan Bursey","goals":3,"opp":"Ice Goats"},{"n":4,"name":"Bryce Schneider","goals":3,"opp":"Smokin Guns"},{"n":4,"name":"Vaughn Labelle","goals":3,"opp":"Smokin Guns"},{"n":8,"name":"Kenton Haugrud","goals":4,"opp":"Colts"},{"n":10,"name":"Michael Kesslering","goals":3,"opp":"Smokin Guns"}],"O":[{"n":6,"name":"Bj Gurba","goals":3,"opp":"Mustangs"},{"n":7,"name":"Taylor Edwards","goals":4,"opp":"Blackout"},{"n":8,"name":"Ryder Terpstra","goals":3,"opp":"Colts"},{"n":11,"name":"Danny Arnold","goals":4,"opp":"Ducks 4"},{"n":12,"name":"Tyson Walker","goals":4,"opp":"Mustangs"},{"n":13,"name":"Steve Holford","goals":4,"opp":"Blackout"}]},"per":{"T":{"1st":31,"2nd":39,"3rd":21},"O":{"2nd":30,"3rd":15,"1st":38}},"spec":{"ppF":4,"ppA":4,"shF":2,"shA":3,"penF":22,"penA":19},"games":[{"n":1,"gid":"15779","head":"Three goals before the first intermission","body":"Up 3-0 after one and 8-3 after two, we never looked back against Blackout. Vaughn Labelle had the hat trick and six different players scored. Matt Stephens took the only penalty of the night.","goals":[{"side":"T","per":"1st","time":"16:58","scorer":"Adam Durham","a":[],"tag":""},{"side":"T","per":"1st","time":"5:41","scorer":"Vaughn Labelle","a":["Adam Lamoureux","Drew Anholt"],"tag":""},{"side":"T","per":"1st","time":"1:07","scorer":"Adam Lamoureux","a":["Kyle Haugrud","Gavin Reynolds"],"tag":""},{"side":"T","per":"2nd","time":"17:36","scorer":"Mike Leibel","a":["Kolton Jordison","Taylor Anderson"],"tag":""},{"side":"T","per":"2nd","time":"12:22","scorer":"Vaughn Labelle","a":["Taylor Anderson","Kolton Jordison"],"tag":""},{"side":"O","per":"2nd","time":"10:01","scorer":"Fletcher Taylor","a":["Mark Mason","Kevin Shaw"],"tag":""},{"side":"O","per":"2nd","time":"9:11","scorer":"Marcus Head","a":["Jordan Vine","Chase Simard"],"tag":""},{"side":"T","per":"2nd","time":"6:49","scorer":"Adam Durham","a":["Drew Anholt","Matthew Briens"],"tag":""},{"side":"O","per":"2nd","time":"4:39","scorer":"Russell Wazney","a":["Jordan Vine","Nathan Wood"],"tag":""},{"side":"T","per":"2nd","time":"4:23","scorer":"Matt McIntyre","a":["Kyle Haugrud","Adam Lamoureux"],"tag":""},{"side":"T","per":"2nd","time":"3:43","scorer":"Kyle Haugrud","a":["Adam Lamoureux","Lee Brown"],"tag":""},{"side":"O","per":"3rd","time":"8:56","scorer":"Jordan Moe","a":["Marcus Head","Steve Holford"],"tag":""},{"side":"O","per":"3rd","time":"5:53","scorer":"Mark Mason","a":["Nathan Wood","Jordan Vine"],"tag":""},{"side":"T","per":"3rd","time":"0:56","scorer":"Mike Leibel","a":["Darryl Folkerson","Matt Stephens"],"tag":""},{"side":"T","per":"3rd","time":"0:34","scorer":"Vaughn Labelle","a":["Taylor Anderson"],"tag":""}],"pens":[{"side":"T","per":"1st","time":"0:01","name":"Matt Stephens","inf":"Slashing"}]},{"n":3,"gid":"15821","head":"Down 5-1, then the lights came on","body":"The Ice Goats led 5-1 in the first period and 5-3 at the first intermission. We outscored them 7-2 the rest of the way. Johnathan Bursey had a hat trick (one on the power play) and six points, and Kolton Jordison added five.","goals":[{"side":"O","per":"1st","time":"18:42","scorer":"Brandin Kiist","a":["Dave Ohlhauser"],"tag":""},{"side":"O","per":"1st","time":"15:52","scorer":"Tim Robinson","a":[],"tag":""},{"side":"O","per":"1st","time":"14:39","scorer":"Lewis Wildman","a":["Colten Wildman","Callum Minor"],"tag":""},{"side":"T","per":"1st","time":"13:32","scorer":"Johnathan Bursey","a":["Adam Durham","Kolton Jordison"],"tag":""},{"side":"O","per":"1st","time":"11:24","scorer":"Callum Minor","a":["Cole Brewis"],"tag":""},{"side":"O","per":"1st","time":"6:42","scorer":"Cole Brewis","a":["Lewis Wildman","Zach Duncan"],"tag":""},{"side":"T","per":"1st","time":"6:26","scorer":"Kolton Jordison","a":["Jeff Wright"],"tag":""},{"side":"T","per":"1st","time":"4:10","scorer":"Adam Durham","a":["Kenton Haugrud","Matt Stephens"],"tag":""},{"side":"T","per":"2nd","time":"16:16","scorer":"Adam Lamoureux","a":["Johnathan Bursey","Adam Durham"],"tag":""},{"side":"T","per":"2nd","time":"12:37","scorer":"Johnathan Bursey","a":[],"tag":"PPG"},{"side":"O","per":"2nd","time":"5:37","scorer":"Zach Duncan","a":["Lewis Wildman"],"tag":""},{"side":"T","per":"2nd","time":"3:33","scorer":"Jeff Wright","a":["Kolton Jordison"],"tag":""},{"side":"T","per":"2nd","time":"2:26","scorer":"Mitch Lipon","a":["Johnathan Bursey","Kolton Jordison"],"tag":""},{"side":"T","per":"3rd","time":"12:54","scorer":"Kolton Jordison","a":["Adam Lamoureux","Matt Stephens"],"tag":""},{"side":"T","per":"3rd","time":"11:37","scorer":"Johnathan Bursey","a":["Jeff Wright"],"tag":""},{"side":"T","per":"3rd","time":"11:30","scorer":"Adam Durham","a":["Johnathan Bursey"],"tag":""},{"side":"O","per":"3rd","time":"10:39","scorer":"Tim Robinson","a":["Kevin Sharp","Brandin Kiist"],"tag":""}],"pens":[{"side":"O","per":"2nd","time":"14:27","name":"Zach Duncan","inf":"Hooking"},{"side":"O","per":"2nd","time":"10:33","name":"Zach Duncan","inf":"Hooking"},{"side":"T","per":"3rd","time":"5:51","name":"Johnathan Bursey","inf":"High-Sticking (Accidental)"}]},{"n":4,"gid":"15826","head":"Three goals against, then a shutout","body":"Smokin Guns scored three in the first period and nothing after that. We answered with seven unanswered. Bryce Schneider has played one game for us this season and scored three, one of them shorthanded, and Labelle had a hat trick of his own.","goals":[{"side":"T","per":"1st","time":"17:50","scorer":"Bryce Schneider","a":["Adam Durham","Darryl Folkerson"],"tag":""},{"side":"O","per":"1st","time":"14:46","scorer":"Kyle Thompson","a":["Joel Manson","Michael Balchand"],"tag":""},{"side":"O","per":"1st","time":"10:38","scorer":"Danny Faulkner","a":["Clifton O'Brien","Dawson Nelson"],"tag":""},{"side":"T","per":"1st","time":"10:05","scorer":"Vaughn Labelle","a":["Mitch Lipon","Adam Lamoureux"],"tag":""},{"side":"T","per":"1st","time":"7:22","scorer":"Vaughn Labelle","a":[],"tag":""},{"side":"O","per":"1st","time":"1:57","scorer":"Shane Henke","a":["Thomas McIvor","Clifton O'Brien"],"tag":""},{"side":"T","per":"2nd","time":"18:55","scorer":"Bryce Schneider","a":[],"tag":"SHG"},{"side":"T","per":"2nd","time":"1:40","scorer":"Vaughn Labelle","a":["Adam Lamoureux","Mike Leibel"],"tag":""},{"side":"T","per":"2nd","time":"1:31","scorer":"Kenton Haugrud","a":["Adam Durham","Bryce Schneider"],"tag":""},{"side":"T","per":"3rd","time":"9:11","scorer":"Bryce Schneider","a":["Adam Durham","Mike Leibel"],"tag":""},{"side":"T","per":"3rd","time":"8:26","scorer":"Mitch Lipon","a":["Kenton Haugrud","Darryl Folkerson"],"tag":""},{"side":"T","per":"3rd","time":"3:57","scorer":"Adam Lamoureux","a":["Vaughn Labelle","Mitch Lipon"],"tag":""},{"side":"T","per":"3rd","time":"2:39","scorer":"Mike Leibel","a":["Adam Durham","Drew Anholt"],"tag":""}],"pens":[{"side":"T","per":"1st","time":"2:27","name":"Darryl Folkerson","inf":"Holding"},{"side":"T","per":"1st","time":"0:01","name":"Darryl Folkerson","inf":"Hooking"}]},{"n":5,"gid":"15842","head":"The second period was a bad idea","body":"We led 2-1 after the first. The Ducks scored four in the second and that was that. Labelle, Darryl Folkerson and Adam Lamoureux got our three goals.","goals":[{"side":"O","per":"1st","time":"16:54","scorer":"Mike Buydens","a":["Logan Gabel"],"tag":""},{"side":"T","per":"1st","time":"10:14","scorer":"Vaughn Labelle","a":["Taylor Anderson","Matt Stephens"],"tag":""},{"side":"T","per":"1st","time":"6:06","scorer":"Darryl Folkerson","a":[],"tag":""},{"side":"O","per":"2nd","time":"18:47","scorer":"Logan Gabel","a":["Dennis Clark"],"tag":""},{"side":"T","per":"2nd","time":"17:22","scorer":"Adam Lamoureux","a":[],"tag":""},{"side":"O","per":"2nd","time":"13:05","scorer":"Colby Mooney","a":["Connor Merritt","Nolan Kwasney"],"tag":""},{"side":"O","per":"2nd","time":"12:30","scorer":"Logan Gabel","a":["Frankie Grzenda","Nolan Kwasney"],"tag":""},{"side":"O","per":"2nd","time":"3:17","scorer":"Dylan Salter","a":["Mathew Lafrance"],"tag":""},{"side":"O","per":"3rd","time":"6:48","scorer":"Dylan Salter","a":["Logan Gabel"],"tag":""}],"pens":[{"side":"O","per":"2nd","time":"9:29","name":"Mitch Hagan","inf":"Boarding"},{"side":"T","per":"3rd","time":"2:49","name":"Adam Lamoureux","inf":"Roughing"}]},{"n":6,"gid":"15857","head":"Nine against, seven for, one penalty","body":"A back-and-forth game that the Mustangs took 9-7, with BJ Gurba scoring a hat trick. Kyle Haugrud and Adam Durham each scored twice for us. The only penalty of the night went to the Mustangs.","goals":[{"side":"O","per":"1st","time":"18:21","scorer":"Sean McCarthy","a":["Curtis Williamson"],"tag":""},{"side":"T","per":"1st","time":"14:43","scorer":"Taylor Anderson","a":["Matt McIntyre","Kyle Haugrud"],"tag":""},{"side":"O","per":"1st","time":"14:15","scorer":"Greg Hoffort","a":["Matthew White","Matthew Cook"],"tag":""},{"side":"T","per":"1st","time":"10:07","scorer":"Adam Durham","a":["Luke Reimer"],"tag":""},{"side":"O","per":"1st","time":"6:22","scorer":"Braydon Hart","a":[],"tag":""},{"side":"T","per":"1st","time":"5:56","scorer":"Adam Lamoureux","a":["Luke Reimer","Adam Durham"],"tag":""},{"side":"T","per":"1st","time":"4:30","scorer":"Kyle Haugrud","a":["Matt McIntyre","Ryan Matthyssen"],"tag":""},{"side":"T","per":"1st","time":"4:04","scorer":"Matt McIntyre","a":["Kyle Haugrud"],"tag":""},{"side":"O","per":"1st","time":"0:36","scorer":"Braydon Hart","a":[],"tag":""},{"side":"O","per":"2nd","time":"18:54","scorer":"Bj Gurba","a":["Darryl Macdonald"],"tag":""},{"side":"O","per":"2nd","time":"18:20","scorer":"Bj Gurba","a":["Matthew Cook","Curtis Williamson"],"tag":""},{"side":"O","per":"2nd","time":"11:03","scorer":"Greg Hoffort","a":["Joel Merkosky","Matthew White"],"tag":""},{"side":"T","per":"2nd","time":"0:11","scorer":"Kyle Haugrud","a":[],"tag":""},{"side":"T","per":"3rd","time":"9:51","scorer":"Adam Durham","a":["Drew Anholt"],"tag":""},{"side":"O","per":"3rd","time":"8:38","scorer":"Bj Gurba","a":["Sean McCarthy","Darryl Macdonald"],"tag":""},{"side":"O","per":"3rd","time":"4:25","scorer":"Matthew White","a":["Greg Hoffort","Braydon Hart"],"tag":""}],"pens":[{"side":"O","per":"3rd","time":"7:52","name":"Matthew Cook","inf":"Hooking"}]},{"n":7,"gid":"15871","head":"Taylor Edwards scored all four and still lost","body":"Blackout's Edwards scored all four of their goals. We trailed 2-1 after one, tied it 4-4 after two and scored twice in the third. Mike Leibel and Taylor Anderson each had two goals.","goals":[{"side":"T","per":"1st","time":"17:28","scorer":"Mike Leibel","a":["Vaughn Labelle","Taylor Anderson"],"tag":""},{"side":"O","per":"1st","time":"16:50","scorer":"Taylor Edwards","a":["Gerry Molvik"],"tag":""},{"side":"O","per":"1st","time":"8:56","scorer":"Taylor Edwards","a":["Russell Wazney","Devon Downey"],"tag":""},{"side":"T","per":"2nd","time":"18:21","scorer":"Taylor Anderson","a":["Vaughn Labelle"],"tag":""},{"side":"O","per":"2nd","time":"12:52","scorer":"Taylor Edwards","a":["Mark Mason","Steven Chaffin"],"tag":""},{"side":"T","per":"2nd","time":"9:55","scorer":"Mike Leibel","a":["Adam Durham","Matt Stephens"],"tag":""},{"side":"O","per":"2nd","time":"9:35","scorer":"Taylor Edwards","a":["Marshall Plandowski"],"tag":""},{"side":"T","per":"2nd","time":"7:30","scorer":"Taylor Anderson","a":["Vaughn Labelle","Mike Leibel"],"tag":""},{"side":"T","per":"3rd","time":"12:39","scorer":"Kolton Jordison","a":["Mike Leibel"],"tag":""},{"side":"T","per":"3rd","time":"8:47","scorer":"Kyle Haugrud","a":["Vaughn Labelle"],"tag":""}],"pens":[{"side":"T","per":"1st","time":"11:08","name":"Luke Reimer","inf":"Holding"},{"side":"O","per":"1st","time":"3:33","name":"Mark Mason","inf":"Goalie Interference"},{"side":"T","per":"2nd","time":"17:29","name":"Matthew Briens","inf":"Holding"},{"side":"O","per":"2nd","time":"4:46","name":"Russell Wazney","inf":"Roughing"},{"side":"T","per":"3rd","time":"10:55","name":"Matt Stephens","inf":"Cross Checking"}]},{"n":8,"gid":"15884","head":"Four from Kenton, and Kyle set up every one","body":"Kenton Haugrud scored four, and Kyle Haugrud had an assist on all four. It wasn't enough against Colts, who won 7-5 behind a Ryder Terpstra hat trick. We never led, and the Colts took both penalties.","goals":[{"side":"O","per":"1st","time":"15:05","scorer":"Ryder Terpstra","a":["Tyler Wiebe","Ken Terpstra"],"tag":""},{"side":"O","per":"1st","time":"12:20","scorer":"Lucas D'Arsie","a":["Simon Leclerc"],"tag":""},{"side":"T","per":"1st","time":"12:14","scorer":"Kenton Haugrud","a":["Kyle Haugrud","Mitch Lipon"],"tag":""},{"side":"T","per":"1st","time":"7:56","scorer":"Mitch Lipon","a":["Kyle Haugrud","Drew Anholt"],"tag":""},{"side":"O","per":"1st","time":"5:52","scorer":"Simon Leclerc","a":["Ken Terpstra","Wesley Kitchen"],"tag":""},{"side":"O","per":"2nd","time":"18:36","scorer":"Ryder Terpstra","a":["Tyler Wiebe","Ken Terpstra"],"tag":""},{"side":"O","per":"2nd","time":"18:03","scorer":"Lucas D'Arsie","a":["Dylan Wittinger","Jesse Guest"],"tag":""},{"side":"O","per":"2nd","time":"12:04","scorer":"Ryder Terpstra","a":["Ken Terpstra"],"tag":""},{"side":"T","per":"2nd","time":"11:38","scorer":"Kenton Haugrud","a":["Kyle Haugrud","Mitch Lipon"],"tag":""},{"side":"O","per":"2nd","time":"9:08","scorer":"Jesse Guest","a":["Tyler Wiebe","Ken Terpstra"],"tag":""},{"side":"T","per":"2nd","time":"8:44","scorer":"Kenton Haugrud","a":["Kyle Haugrud","Ryan Matthyssen"],"tag":""},{"side":"T","per":"2nd","time":"4:26","scorer":"Kenton Haugrud","a":["Kyle Haugrud","Mitch Lipon"],"tag":""}],"pens":[{"side":"O","per":"2nd","time":"1:33","name":"Ken Terpstra","inf":"Hooking"},{"side":"O","per":"3rd","time":"6:27","name":"Adam Timmer","inf":"Hooking"}]},{"n":9,"gid":"15906","head":"Season high: eleven","body":"We led 5-2 after one and 9-2 after two, and finished 11-4. Anderson, Durham, Labelle, Kyle Haugrud and Kenton Haugrud each scored twice, and one of Kyle's was shorthanded.","goals":[{"side":"T","per":"1st","time":"18:35","scorer":"Taylor Anderson","a":["Kyle Haugrud"],"tag":""},{"side":"T","per":"1st","time":"16:11","scorer":"Adam Durham","a":["Kenton Haugrud"],"tag":""},{"side":"O","per":"1st","time":"15:42","scorer":"Tim Robinson","a":["Brady Coady"],"tag":""},{"side":"T","per":"1st","time":"13:31","scorer":"Adam Durham","a":["Adam Lamoureux","Kenton Haugrud"],"tag":""},{"side":"T","per":"1st","time":"11:44","scorer":"Vaughn Labelle","a":["Taylor Anderson","Matthew Briens"],"tag":""},{"side":"T","per":"1st","time":"10:40","scorer":"Vaughn Labelle","a":["Kyle Haugrud","Taylor Anderson"],"tag":""},{"side":"O","per":"1st","time":"0:55","scorer":"Brady Kueneman","a":[],"tag":""},{"side":"T","per":"2nd","time":"18:52","scorer":"Taylor Anderson","a":["Kyle Haugrud","Vaughn Labelle"],"tag":""},{"side":"T","per":"2nd","time":"15:23","scorer":"Kyle Haugrud","a":["Taylor Anderson"],"tag":""},{"side":"T","per":"2nd","time":"14:58","scorer":"Kenton Haugrud","a":["Adam Durham","Matthew Briens"],"tag":""},{"side":"T","per":"2nd","time":"13:57","scorer":"Adam Lamoureux","a":["Kenton Haugrud","Darryl Folkerson"],"tag":""},{"side":"T","per":"3rd","time":"12:30","scorer":"Kyle Haugrud","a":["Vaughn Labelle"],"tag":"SHG"},{"side":"O","per":"3rd","time":"11:20","scorer":"Brady Coady","a":["Myles Genyk"],"tag":"PPG"},{"side":"O","per":"3rd","time":"6:17","scorer":"Brandin Kiist","a":["Dave Ohlhauser","Brady Coady"],"tag":""},{"side":"T","per":"3rd","time":"2:20","scorer":"Kenton Haugrud","a":["Adam Lamoureux","Adam Durham"],"tag":""}],"pens":[{"side":"T","per":"2nd","time":"5:47","name":"Drew Anholt","inf":"Hooking"},{"side":"T","per":"3rd","time":"13:08","name":"Kenton Haugrud","inf":"Tripping"}]},{"n":10,"gid":"15919","head":"Won on an empty-netter","body":"Michael Kesslering scored a hat trick, including a power-play goal, in an 8-7 game that was tied 3-3 after one. Folkerson's empty-netter with 1:37 left made it 8-6, and Smokin Guns scored with 54 seconds to go.","goals":[{"side":"T","per":"1st","time":"18:11","scorer":"Michael Kesslering","a":["Darryl Folkerson","Jeff Wright"],"tag":""},{"side":"T","per":"1st","time":"16:00","scorer":"Luke Reimer","a":["Kolton Jordison","Mike Leibel"],"tag":""},{"side":"T","per":"1st","time":"13:39","scorer":"Taylor Anderson","a":["Evan Herbert","Luke Reimer"],"tag":""},{"side":"O","per":"1st","time":"9:47","scorer":"Ajay Mattu","a":["Danny Faulkner","Evan Ives"],"tag":""},{"side":"O","per":"1st","time":"7:04","scorer":"Evan Ives","a":["Danny Faulkner"],"tag":""},{"side":"O","per":"1st","time":"1:37","scorer":"Kyle Thompson","a":["Kirkland Spencer","Nicholas Fabbro-Swizdaryk"],"tag":""},{"side":"T","per":"2nd","time":"19:34","scorer":"Michael Kesslering","a":["Darryl Folkerson","Lee Brown"],"tag":""},{"side":"O","per":"2nd","time":"13:37","scorer":"Michael Balchand","a":["Kirkland Spencer","Nicholas Fabbro-Swizdaryk"],"tag":""},{"side":"T","per":"2nd","time":"12:01","scorer":"Michael Kesslering","a":["Mike Leibel","Gavin Reynolds"],"tag":"PPG"},{"side":"T","per":"2nd","time":"6:48","scorer":"Drew Anholt","a":["Michael Kesslering"],"tag":""},{"side":"O","per":"2nd","time":"6:00","scorer":"Kirkland Spencer","a":["Evan Ives","Michael Balchand"],"tag":""},{"side":"O","per":"3rd","time":"14:18","scorer":"Clifton O'Brien","a":["Danny Faulkner"],"tag":""},{"side":"T","per":"3rd","time":"13:33","scorer":"Luke Reimer","a":["Kolton Jordison","Drew Anholt"],"tag":""},{"side":"T","per":"3rd","time":"1:37","scorer":"Darryl Folkerson","a":["Drew Anholt","Mike Leibel"],"tag":"EN"},{"side":"O","per":"3rd","time":"0:54","scorer":"Nicholas Fabbro-Swizdaryk","a":["Clifton O'Brien","Terry Blanchard"],"tag":""}],"pens":[{"side":"O","per":"2nd","time":"12:37","name":"Joel Manson","inf":"Tripping"},{"side":"O","per":"2nd","time":"11:07","name":"Evan Ives","inf":"Body Check"},{"side":"O","per":"2nd","time":"9:37","name":"Clifton O'Brien","inf":"Slashing"},{"side":"T","per":"3rd","time":"11:53","name":"Darryl Folkerson","inf":"Tripping"}]},{"n":11,"gid":"15931","head":"Seven goals against in the first period","body":"The Ducks led 7-2 after one, and Danny Arnold had four, the last one his 19th of the season. We outscored them 5-3 the rest of the way, which would have been nice if the game had started in the second.","goals":[{"side":"T","per":"1st","time":"15:49","scorer":"Adam Durham","a":["Kyle Haugrud","Adam Lamoureux"],"tag":""},{"side":"O","per":"1st","time":"15:01","scorer":"Danny Arnold","a":["Logan Gabel"],"tag":""},{"side":"O","per":"1st","time":"10:25","scorer":"Danny Arnold","a":["Mathew Lafrance","Ryan Taylor"],"tag":""},{"side":"T","per":"1st","time":"10:05","scorer":"Michael Kesslering","a":["Luke Reimer"],"tag":""},{"side":"O","per":"1st","time":"9:27","scorer":"Danny Arnold","a":["Dylan Salter","Alex Cartwright"],"tag":""},{"side":"O","per":"1st","time":"9:05","scorer":"Mathew Lafrance","a":["Nolan Kwasney"],"tag":""},{"side":"O","per":"1st","time":"5:54","scorer":"Mitch Hagan","a":["Dennis Clark"],"tag":""},{"side":"O","per":"1st","time":"4:47","scorer":"Danny Arnold","a":["Ryan Taylor","Mathew Lafrance"],"tag":""},{"side":"O","per":"1st","time":"0:59","scorer":"Mathew Lafrance","a":["Mitch Hagan","Nolan Kwasney"],"tag":""},{"side":"T","per":"2nd","time":"19:07","scorer":"Adam Lamoureux","a":["Kyle Haugrud"],"tag":""},{"side":"O","per":"2nd","time":"12:04","scorer":"Alex Cartwright","a":["Dennis Clark","Logan Gabel"],"tag":""},{"side":"T","per":"2nd","time":"10:20","scorer":"Ryan Matthyssen","a":["Mike Leibel","Luke Reimer"],"tag":""},{"side":"T","per":"2nd","time":"7:16","scorer":"Mike Leibel","a":["Matthew Briens"],"tag":""},{"side":"O","per":"2nd","time":"1:15","scorer":"Nolan Kwasney","a":["Dennis Clark","Dylan Salter"],"tag":""},{"side":"T","per":"2nd","time":"0:44","scorer":"Luke Reimer","a":["Matthew Briens","Kolton Jordison"],"tag":""},{"side":"O","per":"3rd","time":"11:21","scorer":"Mitch Hagan","a":["Dylan Salter","Mathew Lafrance"],"tag":"PPG"},{"side":"T","per":"3rd","time":"0:49","scorer":"Luke Reimer","a":["Matthew Briens","Michael Kesslering"],"tag":""}],"pens":[{"side":"T","per":"2nd","time":"6:22","name":"Mike Leibel","inf":"Roughing"},{"side":"T","per":"3rd","time":"12:22","name":"Lee Brown","inf":"Slashing"},{"side":"T","per":"3rd","time":"8:40","name":"Matthew Briens","inf":"Roughing"},{"side":"O","per":"3rd","time":"6:43","name":"Danny Arnold","inf":"Tripping"}]},{"n":12,"gid":"15941","head":"Three shorthanded goals against","body":"We scored five in the second period, two on the power play. The Mustangs scored three shorthanded goals and Tyson Walker had four, so the 10-7 loss was decided on special teams. Four penalties each.","goals":[{"side":"O","per":"1st","time":"17:49","scorer":"Brent Phelps","a":["Tyson Trail","Greg Hoffort"],"tag":""},{"side":"O","per":"1st","time":"15:02","scorer":"Tyson Trail","a":["Brent Phelps","Michael Sokol"],"tag":""},{"side":"T","per":"1st","time":"6:20","scorer":"Drew Anholt","a":["Johnathan Bursey","Mitch Lipon"],"tag":""},{"side":"O","per":"2nd","time":"18:23","scorer":"Matthew Cook","a":["Brent Phelps","Darryl Macdonald"],"tag":"PPG"},{"side":"O","per":"2nd","time":"16:02","scorer":"Caleb Johnson","a":["Darryl Macdonald"],"tag":"SHG"},{"side":"T","per":"2nd","time":"15:54","scorer":"Ryan Matthyssen","a":["Mike Leibel"],"tag":"PPG"},{"side":"T","per":"2nd","time":"12:15","scorer":"Johnathan Bursey","a":["Drew Anholt","Jeff Wright"],"tag":""},{"side":"O","per":"2nd","time":"11:01","scorer":"Tyson Walker","a":["Joel Merkosky"],"tag":""},{"side":"O","per":"2nd","time":"9:02","scorer":"Brent Phelps","a":["Tyson Walker","Matthew Cook"],"tag":""},{"side":"O","per":"2nd","time":"8:26","scorer":"Jac Roberts","a":[],"tag":"SHG"},{"side":"T","per":"2nd","time":"7:17","scorer":"Mike Leibel","a":["Ryan Matthyssen","Jeff Wright"],"tag":"PPG"},{"side":"T","per":"2nd","time":"4:53","scorer":"Jeff Wright","a":["Drew Anholt","Adam Lamoureux"],"tag":""},{"side":"T","per":"2nd","time":"0:46","scorer":"Ryan Matthyssen","a":["Johnathan Bursey","Evan Herbert"],"tag":""},{"side":"O","per":"3rd","time":"12:12","scorer":"Tyson Walker","a":["Jean Francois Voyer"],"tag":"SHG"},{"side":"O","per":"3rd","time":"5:03","scorer":"Tyson Walker","a":["Caleb Johnson"],"tag":""},{"side":"O","per":"3rd","time":"3:14","scorer":"Tyson Walker","a":["Taylor Johnson","Jac Roberts"],"tag":""},{"side":"T","per":"3rd","time":"0:21","scorer":"Mike Leibel","a":[],"tag":""}],"pens":[{"side":"T","per":"2nd","time":"19:05","name":"Ryan Matthyssen","inf":"Hooking"},{"side":"T","per":"2nd","time":"18:46","name":"Mitch Lipon","inf":"Tripping"},{"side":"O","per":"2nd","time":"16:28","name":"Tyson Walker","inf":"Tripping"},{"side":"O","per":"2nd","time":"8:45","name":"Greg Hoffort","inf":"Tripping"},{"side":"O","per":"3rd","time":"13:49","name":"Darryl Macdonald","inf":"Slashing"},{"side":"O","per":"3rd","time":"10:22","name":"Michael Sokol","inf":"Slashing"},{"side":"T","per":"3rd","time":"9:04","name":"Johnathan Bursey","inf":"Tripping"},{"side":"T","per":"3rd","time":"2:33","name":"Mike Leibel","inf":"High-Sticking"}]},{"n":13,"gid":"15952","head":"Down 6-1 after the first","body":"Steve Holford scored four for Blackout (12 on the season) as they led 6-1 after one. We won the second and third periods 6-5 combined, but the game ended 11-7. It finished with roughing minors on Lee Brown and Cody Cross.","goals":[{"side":"T","per":"1st","time":"13:30","scorer":"Vaughn Labelle","a":["Matt Stephens","Adam Lamoureux"],"tag":""},{"side":"O","per":"1st","time":"12:12","scorer":"Steve Holford","a":["Jordan Moe","Russell Wazney"],"tag":""},{"side":"O","per":"1st","time":"8:46","scorer":"Taylor Edwards","a":[],"tag":""},{"side":"O","per":"1st","time":"4:58","scorer":"Steve Holford","a":[],"tag":""},{"side":"O","per":"1st","time":"4:29","scorer":"Austin Croft","a":["Russell Wazney"],"tag":""},{"side":"O","per":"1st","time":"4:12","scorer":"Jordan Moe","a":["Marshall Plandowski"],"tag":""},{"side":"O","per":"1st","time":"2:49","scorer":"Austin Croft","a":["Marcus Head","Devon Downey"],"tag":"PPG"},{"side":"T","per":"2nd","time":"19:49","scorer":"Taylor Anderson","a":[],"tag":""},{"side":"T","per":"2nd","time":"17:30","scorer":"Adam Durham","a":["Luke Reimer"],"tag":""},{"side":"O","per":"2nd","time":"10:25","scorer":"Marshall Plandowski","a":["Kevin Shaw","Cody Cross"],"tag":""},{"side":"T","per":"2nd","time":"8:11","scorer":"Taylor Anderson","a":["Michael Kesslering","Ryan Matthyssen"],"tag":""},{"side":"O","per":"2nd","time":"7:43","scorer":"Marshall Plandowski","a":["Kevin Shaw","Taylor Edwards"],"tag":""},{"side":"O","per":"2nd","time":"2:56","scorer":"Taylor Edwards","a":[],"tag":""},{"side":"O","per":"2nd","time":"0:13","scorer":"Steve Holford","a":["Jordan Moe","Marshall Plandowski"],"tag":""},{"side":"T","per":"3rd","time":"14:32","scorer":"Vaughn Labelle","a":["Mike Leibel","Taylor Anderson"],"tag":""},{"side":"T","per":"3rd","time":"12:24","scorer":"Michael Kesslering","a":["Luke Reimer","Adam Durham"],"tag":""},{"side":"T","per":"3rd","time":"4:45","scorer":"Mike Leibel","a":[],"tag":""},{"side":"O","per":"3rd","time":"2:09","scorer":"Steve Holford","a":["Russell Wazney","Jordan Moe"],"tag":""}],"pens":[{"side":"T","per":"1st","time":"3:03","name":"Mike Leibel","inf":"Hooking"},{"side":"T","per":"2nd","time":"7:18","name":"Lee Brown","inf":"Roughing"},{"side":"O","per":"3rd","time":"10:07","name":"Cody Cross","inf":"Slashing"},{"side":"O","per":"3rd","time":"9:14","name":"Marshall Plandowski","inf":"Roughing"},{"side":"T","per":"3rd","time":"9:14","name":"Adam Lamoureux","inf":"Roughing"},{"side":"O","per":"3rd","time":"0:01","name":"Cody Cross","inf":"Roughing"},{"side":"T","per":"3rd","time":"0:01","name":"Lee Brown","inf":"Roughing"}]}],"doneNs":[1,3,4,5,6,7,8,9,10,11,12,13]}</script>
+<script>
+(function(){
+var D = JSON.parse(document.getElementById('data').textContent);
+var $ = function(s,r){return (r||document).querySelector(s)};
+var esc = function(s){return String(s).replace(/[&<>"']/g,function(c){return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]})};
+var MONTHS=['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'], DOW=['Sun','Mon','Tue','Wed','Thu','Fri','Sat'];
+function dt(s){var p=s.split('-');return new Date(+p[0],+p[1]-1,+p[2])}
+function dlabel(s){var d=dt(s);return DOW[d.getDay()]+', '+MONTHS[d.getMonth()]+' '+d.getDate()}
+function dshort(s){var d=dt(s);return MONTHS[d.getMonth()]+' '+d.getDate()}
+function arena(c){return D.arenas[c]||c}
+function last(n){return n.split(' ').slice(-1)[0]}
+function oppName(o){return o}
+var goalieNames = D.goalies.map(function(g){return g.name});
+
+/* ---------- derived numbers ---------- */
+var played = D.sched.filter(function(s){return s.res});
+var upcoming = D.sched.filter(function(s){return !s.res});
+var nSum = D.games.length;
+var sumNs = D.games.map(function(g){return g.n});
+var noSum = played.filter(function(s){return sumNs.indexOf(s.n)<0});
+(function(){var l=played[played.length-1];
+  $('#asof-n').textContent=l?l.n:0; $('#asof-d').textContent=l?dshort(l.date):'';
+  $('#nosum').textContent=noSum.length?(noSum.length===1?'Game '+noSum[0].n+' (a '+noSum[0].gf+'-'+noSum[0].ga+' '+(noSum[0].res==='W'?'win':'loss')+(noSum[0].ha==='H'?' vs ':' at ')+noSum[0].opp+') has no game summary, so it appears in the record and schedule but not in the goal-by-goal analysis.'
+    :noSum.length+' games have no game summary, so they appear in the record and schedule but not in the goal-by-goal analysis.'):'';
+ })();
+function plural(n,w){return n+' '+(n===1?w:w+(/s$/.test(w)?'es':'s'))}
+var W = played.filter(function(s){return s.res==='W'}).length, L = played.length-W;
+var GF = played.reduce(function(a,s){return a+s.gf},0), GA = played.reduce(function(a,s){return a+s.ga},0);
+var P = D.players.filter(function(p){return goalieNames.indexOf(p.name)<0 || p.pts>0});
+var gameLabel = {}; D.doneNs.forEach(function(n,i){gameLabel[i]=n});
+
+/* ---------- tooltip ---------- */
+var tip = $('#tip');
+document.addEventListener('mouseover',function(e){var t=e.target.closest('[data-tip]'); if(!t){tip.style.display='none';return}
+  tip.textContent=t.getAttribute('data-tip'); tip.style.display='block'; place(e)});
+document.addEventListener('mousemove',function(e){if(tip.style.display==='block')place(e)});
+document.addEventListener('mouseout',function(e){if(!e.relatedTarget||!e.relatedTarget.closest||!e.relatedTarget.closest('[data-tip]'))tip.style.display='none'});
+function place(e){var w=tip.offsetWidth,h=tip.offsetHeight,x=e.clientX+14,y=e.clientY+14;
+  if(x+w>innerWidth-8)x=innerWidth-w-8; if(y+h>innerHeight-8)y=e.clientY-h-12; tip.style.left=Math.max(8,x)+'px'; tip.style.top=Math.max(8,y)+'px'}
+
+/* ---------- header ---------- */
+$('#sub').textContent = 'Division 4 · 2026/27 · Calgary Men’s Hockey Association';
+$('#rec').innerHTML =
+  '<div><b>'+W+'-'+L+'</b>Record</div>'+
+  '<div><b>'+GF+'-'+GA+'</b>Goals for-against</div>'+
+  '<div><b>'+played.length+'/'+D.sched.length+'</b>Games played</div>';
+
+/* ---------- tabs / routing ---------- */
+var TABS=[['overview','Overview'],['player-stats','Player Stats'],['connections','Connections'],['trends','Trends'],['game-recaps','Game Recaps'],['schedule','Schedule']];
+$('#tabs').innerHTML = TABS.map(function(t){return '<a href="#'+t[0]+'" data-t="'+t[0]+'">'+t[1]+'</a>'}).join('');
+function route(){var h=(location.hash||'#overview').slice(1); if(h==='players')h='player-stats'; if(h==='games')h='game-recaps'; if(!TABS.some(function(t){return t[0]===h}))h='overview';
+  TABS.forEach(function(t){var on=t[0]===h; $('#v-'+t[0]).classList.toggle('on',on);
+    var a=$('#tabs a[data-t="'+t[0]+'"]'); if(on)a.setAttribute('aria-current','page'); else a.removeAttribute('aria-current')});}
+addEventListener('hashchange',function(){route();scrollTo(0,0)}); route();
+
+/* ---------- OVERVIEW ---------- */
+(function(){
+  var nx = upcoming[0] || null;
+  var h2h = nx ? played.filter(function(s){return s.opp===nx.opp}) : [];
+  var h2hTxt = h2h.length ? h2h.map(function(s){return '<span class="pill '+s.res+'">'+s.res+'</span> '+s.gf+'-'+s.ga+' on '+dshort(s.date)}).join(' &nbsp; ') : 'First meeting this season';
+  var recent = played.slice(-6).reverse().map(function(s){
+    return '<div class="g"><small>'+dshort(s.date)+' '+(s.ha==='H'?'vs':'@')+' '+esc(s.opp)+'</small><b><span class="pill '+s.res+'">'+s.res+'</span> '+s.gf+'-'+s.ga+'</b></div>'}).join('');
+  function top(key,n){return P.slice().sort(function(a,b){return b[key]-a[key]||b.pts-a.pts}).slice(0,n)}
+  function list(arr,key){return '<ol class="rank">'+arr.map(function(p){return '<li><span>'+esc(p.name)+'</span><span class="n">'+p[key]+'</span></li>'}).join('')+'</ol>'}
+  var hot = P.filter(function(p){return p.gp>0}).slice().sort(function(a,b){return b.last5-a.last5||b.pts-a.pts}).slice(0,5);
+  var awards = buildAwards();
+  $('#v-overview').innerHTML =
+   '<h2>Where we stand</h2><p class="lede">'+winLossLine()+'</p>'+
+   '<div class="grid g2">'+
+    (nx?'<div class="card next"><h3>Next game</h3><div class="big">'+(nx.ha==='H'?'vs':'@')+' '+esc(nx.opp)+'</div>'+
+      '<div class="when">'+dlabel(nx.date)+' · '+nx.time+' · '+esc(arena(nx.arena))+' ('+(nx.ha==='H'?'home':'away')+')</div>'+
+      '<div style="margin-top:8px"><span class="sub">Earlier this season:</span> '+h2hTxt+'</div>'+
+      (nx.gid?'<div style="margin-top:8px"><a href="https://cmhahockey.com/game/'+nx.gid+'/preview" rel="noopener">CMHA game preview</a></div>':'')+'</div>'
+     :'<div class="card next"><h3>Next game</h3><div class="big">Season complete</div><div class="when">No games left on the schedule.</div></div>')+
+    '<div class="card"><h3>Last six</h3><div class="strip">'+recent+'</div></div>'+
+   '</div>'+
+   '<div class="grid g3" style="margin-top:16px">'+
+    '<div class="card"><h3><a class="jump" href="#player-stats" data-sort="pts">Points</a></h3>'+list(top('pts',5),'pts')+'</div>'+
+    '<div class="card"><h3><a class="jump" href="#player-stats" data-sort="g">Goals</a></h3>'+list(top('g',5),'g')+'</div>'+
+    '<div class="card"><h3><a class="jump" href="#player-stats" data-sort="a">Assists</a></h3>'+list(top('a',5),'a')+'</div>'+
+   '</div>'+
+   '<div class="grid g2" style="margin-top:16px">'+
+    '<div class="card"><h3>Hot right now</h3><p class="sub" style="margin:0 0 8px">Points over the last five games with a game summary.</p><ol class="rank">'+
+      hot.map(function(p){return '<li><span>'+esc(p.name)+' <span class="sub">'+p.by.slice(-5).join(' · ')+'</span></span><span class="n">'+p.last5+'</span></li>'}).join('')+'</ol></div>'+
+    '<div class="card"><h3>Season awards</h3><ul class="plain">'+awards.map(function(a){return '<li style="padding:6px 0;border-top:1px solid var(--line)"><b>'+a[0]+'</b> '+a[1]+'</li>'}).join('')+'</ul></div>'+
+   '</div>';
+  $('#v-overview').addEventListener('click',function(e){var a=e.target.closest('a[data-sort]'); if(a&&D.setSort)D.setSort(a.getAttribute('data-sort'))});
+  function winLossLine(){
+    var close = played.filter(function(s){return Math.abs(s.gf-s.ga)<=1}).length;
+    var bigW = played.filter(function(s){return s.res==='W'&&s.gf-s.ga>=3}).length;
+    var w=played.filter(function(s){return s.res==='W'}).length, l=played.length-w;
+    if(!played.length) return 'No games played yet.';
+    return plural(w,'win')+' and '+plural(l,'loss')+' through '+plural(played.length,'game')+'. '+plural(bigW,'win')+' by three goals or more, and '+plural(close,'game')+' decided by a single goal.'}
+  function buildAwards(){
+    var A=[]; var s=function(k){return P.slice().sort(function(a,b){return b[k]-a[k]})};
+    var g=s('g')[0], a=s('a')[0], p=s('pts')[0];
+    A.push(['Sniper',esc(g.name)+', '+g.g+' goals']);
+    A.push(['Playmaker',esc(a.name)+', '+a.a+' assists']);
+    A.push(['Points leader',esc(p.name)+', '+p.pts+' points in '+p.gp+' games']);
+    var eff=P.filter(function(x){return x.gp>=4}).slice().sort(function(x,y){return y.g/y.gp-x.g/x.gp})[0];
+    A.push(['Goals per game (4+ GP)',esc(eff.name)+', '+(eff.g/eff.gp).toFixed(2)]);
+    var maxp=Math.max.apply(null,P.map(function(x){return x.pim})); var pb=P.filter(function(x){return x.pim===maxp});
+    A.push(['Penalty box regulars',pb.map(function(x){return esc(x.name)}).join(', ')+' ('+maxp+' PIM each)']);
+    A.push(['Hat tricks','We have '+D.hat.T.length+'; opponents have '+D.hat.O.length+' against us']);
+    return A}
+})();
+
+/* ---------- PLAYER STATS ---------- */
+(function(){
+  var cols=[['name','Player','l'],['gp','GP'],['g','G'],['a','A'],['pts','PTS'],['ppg','P/GP'],['pp','PP'],['sh','SH'],['pim','PIM'],['last5','L5'],['games','By game']];
+  var rows=P.map(function(p){var o=Object.assign({},p);o.ppg=p.gp?p.pts/p.gp:0;return o});
+  var skaters=rows.filter(function(p){return goalieNames.indexOf(p.name)<0&&p.gp>0});
+  var range={}; ['g','a','pts','ppg','pp','sh','pim','last5'].forEach(function(k){var v=skaters.map(function(p){return p[k]});range[k]=[Math.min.apply(null,v),Math.max.apply(null,v)]});
+  /* Green = best on the team, red = lowest. PIM runs the other way (fewer is better). PP and SH only turn green when above 0. */
+  function shade(k,v,isG){
+    if(isG||!range[k])return '';
+    var lo=range[k][0],hi=range[k][1]; if(hi===lo)return '';
+    var t=(v-lo)/(hi-lo);
+    if(k==='pim')t=1-t;
+    if(k==='pp'||k==='sh')return v>0?' style="background:color-mix(in srgb,var(--good) '+Math.round(22+38*t)+'%,var(--surface))"':'';
+    var c=t>=0.5?'var(--good)':'var(--bad)', s=Math.abs(t-0.5)*2;
+    return ' style="background:color-mix(in srgb,'+c+' '+Math.round(s*58)+'%,var(--surface))"'}
+  var key='pts',dir=-1;
+  function sched(n){return D.sched.filter(function(s){return s.n===n})[0]}
+  function td(k,v,txt,isG,cls){return '<td class="'+(cls||'')+'"'+shade(k,v,isG)+'>'+txt+'</td>'}
+  function draw(){
+    var sorted=rows.slice().sort(function(a,b){
+      if(key==='name')return dir*a.name.localeCompare(b.name);
+      return dir*((a[key]||0)-(b[key]||0))||b.pts-a.pts||a.name.localeCompare(b.name)});
+    var head='<tr>'+cols.map(function(c){var s=(c[0]===key)?' aria-sort="'+(dir<0?'descending':'ascending')+'"':'';
+      if(c[0]==='games')return '<th class="l">'+c[1]+'</th>';
+      return '<th class="'+(c[2]||'')+'"'+s+'><button data-k="'+c[0]+'">'+c[1]+'</button></th>'}).join('')+'</tr>';
+    var body=sorted.map(function(p){
+      var isG=goalieNames.indexOf(p.name)>=0;
+      var boxes='<span class="boxes">'+p.by.map(function(v,i){var c=v>=3?'b2':(v>=1?'b1':'b0');
+        return '<i class="'+c+'" data-tip="Game '+D.doneNs[i]+' vs '+esc(sched(D.doneNs[i]).opp)+': '+v+' pt'+(v===1?'':'s')+'"></i>'}).join('')+'</span>';
+      return '<tr><td class="pl">'+esc(p.name)+(isG?'<span class="tag">G</span>':'')+'</td><td>'+p.gp+'</td>'+
+        td('g',p.g,p.g,isG,'num')+td('a',p.a,p.a,isG,'num')+td('pts',p.pts,'<b>'+p.pts+'</b>',isG,'num')+td('ppg',p.ppg,p.ppg.toFixed(2),isG)+
+        td('pp',p.pp,p.pp,isG)+td('sh',p.sh,p.sh,isG)+td('pim',p.pim,p.pim,isG)+td('last5',p.last5,p.last5,isG,'num')+'<td class="l">'+boxes+'</td></tr>'}).join('');
+    $('#ptable').innerHTML='<thead>'+head+'</thead><tbody>'+body+'</tbody>';
+  }
+  D.setSort=function(k){key=k;dir=(k==='name')?1:-1;draw()};
+  var gl=D.goalies.map(function(g){return '<tr><td class="pl">'+esc(g.name)+'</td><td>'+g.gp+'</td><td>'+g.w+'</td><td>'+g.l+'</td><td>'+g.t+'</td><td>'+g.ga+'</td><td class="num">'+g.gaa.toFixed(2)+'</td><td>'+g.so+'</td></tr>'}).join('');
+  $('#v-player-stats').innerHTML='<h2>Player Stats</h2><p class="lede">Click a column heading to sort.</p>'+
+   '<div class="legend"><span><i class="sw" style="background:var(--good)"></i>Best on the team</span><span><i class="sw" style="background:var(--bad)"></i>Lowest on the team</span><span class="sub">PIM is reversed: fewer minutes is green.</span></div>'+
+   '<div class="legend"><b>By game</b><span><i class="sw b0"></i>0 points or no data</span><span><i class="sw b1"></i>1 or 2 points</span><span><i class="sw b2"></i>3 or more points</span></div>'+
+   '<div class="tablewrap"><table id="ptable"></table></div>'+
+   '<p class="note">By game shows each of the '+nSum+' games with a summary, oldest on the left. P/GP is points per game played. PP and SH are power-play and shorthanded goals, and turn green when above zero. L5 is points over the last five games with a summary. Goalies appear in the skater table only if they have points.</p>'+
+   '<h3 style="margin:24px 0 8px">Goalies</h3><div class="tablewrap"><table><thead><tr><th>Goalie</th><th>GP</th><th>W</th><th>L</th><th>T</th><th>GA</th><th>GAA</th><th>SO</th></tr></thead><tbody>'+gl+'</tbody></table></div>';
+  $('#v-player-stats').addEventListener('click',function(e){var b=e.target.closest('th button'); if(!b)return;
+    var k=b.getAttribute('data-k'); if(k===key)dir=-dir; else{key=k;dir=(k==='name')?1:-1} draw()});
+  draw();
+})();
+
+/* ---------- CONNECTIONS ---------- */
+(function(){
+  var mode='all';
+  var ord=D.order.slice().sort(function(a,b){return a.localeCompare(b)});   /* A to Z by first name, same on both axes */
+  function val(c){return mode==='all'?c[0]+c[1]:c[0]}
+  var top=null; Object.keys(D.cells).forEach(function(k){var c=D.cells[k],v=c[0]+c[1]; if(!top||v>top.v)top={k:k,v:v}});
+  var tp=top.k.split('>');
+  function drawMatrix(){
+    var mx=1; Object.keys(D.cells).forEach(function(k){mx=Math.max(mx,val(D.cells[k]))});
+    var colT={},rowT={}; ord.forEach(function(n){colT[n]=0;rowT[n]=0});
+    Object.keys(D.cells).forEach(function(k){var p=k.split('>');var v=val(D.cells[k]);rowT[p[0]]+=v;colT[p[1]]+=v});
+    var h='<thead><tr><th class="corner" rowspan="2">Gave the assist ↓</th><th class="axis c" colspan="'+ord.length+'">Scored the goal →</th><th></th></tr>'+
+      '<tr>'+ord.map(function(n){return '<th class="colh" data-c="'+esc(n)+'"><span>'+esc(n)+'</span></th>'}).join('')+'<th class="tot colh"><span>Total assists</span></th></tr></thead><tbody>';
+    ord.forEach(function(r){
+      h+='<tr><th class="rowh" data-r="'+esc(r)+'">'+esc(r)+'</th>';
+      ord.forEach(function(c){
+        if(r===c){h+='<td><div class="cell self" data-r="'+esc(r)+'" data-c="'+esc(c)+'" aria-hidden="true"></div></td>';return}
+        var cell=D.cells[r+'>'+c]; var v=cell?val(cell):0;
+        if(!v){h+='<td><div class="cell z" data-r="'+esc(r)+'" data-c="'+esc(c)+'"></div></td>';return}
+        var t=0.14+0.86*(v/mx);
+        var n=cell[0]+cell[1], tt=r+' assisted '+n+' of '+c+'’s goals ('+cell[0]+' primary, '+cell[1]+' secondary)';
+        h+='<td><div class="cell'+(t>0.55?' on':'')+'" style="--t:'+t.toFixed(2)+'" data-r="'+esc(r)+'" data-c="'+esc(c)+'" data-tip="'+esc(tt)+'">'+v+'</div></td>'});
+      h+='<td class="tot">'+rowT[r]+'</td></tr>'});
+    h+='<tr><th class="rowh">Total assists received</th>'+ord.map(function(c){return '<td class="tot">'+colT[c]+'</td>'}).join('')+'<td></td></tr></tbody>';
+    $('#mx').innerHTML=h}
+  var links=[]; (function(){
+    var m={}; Object.keys(D.cells).forEach(function(k){var p=k.split('>'); var key=[p[0],p[1]].sort().join('|'); m[key]=(m[key]||0)+D.cells[k][0]+D.cells[k][1]});
+    links=Object.keys(m).map(function(k){return {p:k.split('|'),n:m[k]}}).sort(function(a,b){return b.n-a.n}).slice(0,8)})();
+  var maxP=Math.max.apply(null,D.players.map(function(p){return p.pts}));
+  var G2='color-mix(in srgb,var(--heat) 45%,var(--bg))';
+  var pb=D.players.filter(function(p){return p.pts>0&&goalieNames.indexOf(p.name)<0}).sort(function(a,b){return b.pts-a.pts||b.g-a.g}).slice(0,16).map(function(p){
+    var seg=[[p.g,'var(--accent)','goals'],[p.a1,'var(--heat)','primary assists'],[p.a2,G2,'secondary assists']];
+    return '<div class="bar"><span>'+esc(p.name)+'</span><div class="track" style="width:'+(100*p.pts/maxP).toFixed(1)+'%">'+seg.map(function(s){
+      return s[0]?'<i style="flex:'+s[0]+';background:'+s[1]+'" data-tip="'+esc(p.name)+': '+s[0]+' '+s[2]+'"></i>':''}).join('')+'</div><span class="v">'+p.pts+'</span></div>'}).join('');
+  $('#v-connections').innerHTML='<h2>Who sets up who</h2>'+
+   '<div class="how"><b>How to read it.</b> Find the player who gave the assist down the left side, then follow that row across to the player who scored. The number is how many of that scorer’s goals the passer assisted. Example: <b>'+esc(tp[0])+'</b> assisted <b>'+top.v+'</b> of <b>'+esc(tp[1])+'</b>’s goals. A black square is a player matched with himself.</div>'+
+   '<div class="ctl" role="group" aria-label="Assist type"><button data-m="all" aria-pressed="true">All assists</button><button data-m="primary" aria-pressed="false">Primary assists only</button></div>'+
+   '<div class="legend"><span class="scale"><span>Fewer</span><i style="--t:.14"></i><i style="--t:.35"></i><i style="--t:.6"></i><i style="--t:1"></i><span>More</span></span><span><i class="sw" style="background:#000"></i>Same player</span></div>'+
+   '<div class="tablewrap"><table class="matrix" id="mx"></table></div>'+
+   '<p class="note">Players are listed A to Z by first name on both sides. Hover or tap a square to see the exact count. The matrix only counts goals: a good pass that did not end in a goal does not show up. Covers the '+nSum+' games with a summary.</p>'+
+   '<div class="grid g2" style="margin-top:20px">'+
+    '<div class="card"><h3>Best connections</h3><p class="sub" style="margin:0 0 8px">Goals where both players were on the scoresheet together, as scorer or either assist.</p><ol class="rank">'+links.map(function(l){return '<li><span>'+esc(l.p[0])+' &amp; '+esc(l.p[1])+'</span><span class="n">'+l.n+'</span></li>'}).join('')+'</ol></div>'+
+    '<div class="card"><h3>Repeat trios</h3><p class="sub" style="margin:0 0 8px">The same three players on one goal.</p><ol class="rank">'+D.trios.slice(0,6).map(function(t){return '<li><span>'+t.p.map(esc).join(', ')+'</span><span class="n">'+t.n+'</span></li>'}).join('')+'</ol><p class="note">Good candidates to keep together, though goals are a small sample.</p></div>'+
+   '</div>'+
+   '<div class="card" style="margin-top:16px"><h3>Goals and assists by player</h3><div class="legend"><span><i class="sw" style="background:var(--accent)"></i>Goals</span><span><i class="sw" style="background:var(--heat)"></i>Primary assists</span><span><i class="sw" style="background:'+G2+'"></i>Secondary assists</span></div><div class="bars">'+pb+'</div></div>';
+  $('#v-connections').addEventListener('click',function(e){var b=e.target.closest('[data-m]'); if(!b)return; mode=b.getAttribute('data-m');
+    [].forEach.call($('#v-connections').querySelectorAll('[data-m]'),function(x){x.setAttribute('aria-pressed',x===b)}); drawMatrix()});
+  /* hover a square to light up its row and column headings */
+  $('#v-connections').addEventListener('mouseover',function(e){
+    var c=e.target.closest('.cell[data-r]'); var hs=document.querySelectorAll('#mx th.hl'); [].forEach.call(hs,function(x){x.classList.remove('hl')});
+    if(!c)return; var r=c.getAttribute('data-r'), k=c.getAttribute('data-c');
+    [].forEach.call(document.querySelectorAll('#mx th[data-r],#mx th[data-c]'),function(x){
+      if(x.getAttribute('data-r')===r||x.getAttribute('data-c')===k)x.classList.add('hl')})});
+  drawMatrix();
+})();
+
+/* ---------- GAMES ---------- */
+(function(){
+  var s=function(n){return D.sched.filter(function(x){return x.n===n})[0]};
+  var cards=D.games.slice().reverse().map(function(g){
+    var sc=s(g.n), res=sc.res;
+    var goals=g.goals.slice().sort(function(a,b){var o={'1st':0,'2nd':1,'3rd':2}; function t(x){var p=x.time.split(':');return o[x.per]*1200+1200-(+p[0]*60+ +p[1])} return t(a)-t(b)});
+    var t=0,o=0;
+    var gl=goals.map(function(x){ if(x.side==='T')t++; else o++;
+      var as=x.a.length?x.a.join(', '):'unassisted';
+      return '<li class="'+(x.side==='T'?'us':'them')+'"><small>'+x.per+' '+x.time+'</small><span>'+(x.side==='T'?'306ers':esc(sc.opp))+' · '+esc(x.scorer)+(x.tag?' <small>'+x.tag+'</small>':'')+' <small>('+esc(as)+') '+t+'-'+o+'</small></span></li>'}).join('');
+    var pl=g.pens.length?g.pens.map(function(p){return '<li class="'+(p.side==='T'?'us':'them')+'"><small>'+p.per+' '+p.time+'</small><span>'+(p.side==='T'?'306ers':esc(sc.opp))+' · '+esc(p.name)+', '+esc(p.inf)+'</span></li>'}).join(''):'<li><small></small><span class="sub">No penalties</span></li>';
+    return '<article class="gcard '+res+'"><div class="hd"><div><span class="pill '+res+'">'+res+'</span> <span class="meta">Game '+g.n+' · '+dlabel(sc.date)+' · '+(sc.ha==='H'?'vs ':'@ ')+esc(sc.opp)+' · '+esc(arena(sc.arena))+'</span></div><div class="sc">'+sc.gf+'-'+sc.ga+'</div></div>'+
+      '<h3 class="head">'+esc(g.head)+'</h3><p>'+esc(g.body)+'</p>'+
+      '<details><summary>Goals and penalties</summary><ul class="plain log">'+gl+'</ul><h3 style="margin:12px 0 4px;font-size:1rem">Penalties</h3><ul class="plain log">'+pl+'</ul></details>'+
+      '<a href="https://cmhahockey.com/game/'+g.gid+'/summary" rel="noopener" style="font-size:.88rem">CMHA game summary</a></article>'}).join('');
+  $('#v-game-recaps').innerHTML='<h2>Game Recaps</h2><p class="lede">Newest first. Each recap is written from that game’s goal and penalty log.</p><div class="stack">'+cards+'</div>';
+})();
+
+/* ---------- SCHEDULE ---------- */
+(function(){
+  var nxt=upcoming[0]?upcoming[0].n:null, filter='all';
+  function draw(){
+    var rows=D.sched.filter(function(s){return filter==='all'||(filter==='played'&&s.res)||(filter==='upcoming'&&!s.res)}).map(function(s){
+      var link=s.res&&s.gid?'<a href="https://cmhahockey.com/game/'+s.gid+'/summary" rel="noopener">Summary</a>':(!s.res?'<a href="https://cmhahockey.com/game/'+s.gid+'/preview" rel="noopener">Preview</a>':'');
+      var r=s.res?'<span class="pill '+s.res+'">'+s.res+'</span> '+s.gf+'-'+s.ga:'<span class="pill up">'+(s.n===nxt?'NEXT':'TBD')+'</span>';
+      return '<tr><td>'+s.n+'</td><td class="l">'+dlabel(s.date)+'</td><td class="l">'+s.time+'</td><td class="l">'+esc(arena(s.arena))+'</td><td class="l">'+(s.ha==='H'?'Home':'Away')+'</td><td class="l pl">'+esc(s.opp)+'</td><td class="l">'+r+'</td><td class="l">'+link+'</td></tr>'}).join('');
+    $('#stable').innerHTML='<thead><tr><th>#</th><th class="l">Date</th><th class="l">Time</th><th class="l">Arena</th><th class="l">H/A</th><th class="l">Opponent</th><th class="l">Result</th><th class="l">CMHA</th></tr></thead><tbody>'+rows+'</tbody>'}
+  $('#v-schedule').innerHTML='<h2>Schedule</h2><p class="lede">All '+D.sched.length+' games. CMHA also publishes a calendar subscription feed for the team at cmhahockey.com/cal-subscription/4035.</p>'+
+   '<div class="ctl" role="group" aria-label="Filter games"><button data-f="all" aria-pressed="true">All '+D.sched.length+'</button><button data-f="upcoming" aria-pressed="false">Upcoming</button><button data-f="played" aria-pressed="false">Played</button></div>'+
+   '<div class="tablewrap"><table id="stable"></table></div>';
+  $('#v-schedule').addEventListener('click',function(e){var b=e.target.closest('[data-f]'); if(!b)return; filter=b.getAttribute('data-f');
+    [].forEach.call($('#v-schedule').querySelectorAll('[data-f]'),function(x){x.setAttribute('aria-pressed',x===b)}); draw()});
+  draw();
+})();
+
+/* ---------- TRENDS ---------- */
+(function(){
+  var pf=D.per.T, pa=D.per.O, mx=Math.max(pf['1st'],pf['2nd'],pf['3rd'],pa['1st'],pa['2nd'],pa['3rd']);
+  var pcols=['1st','2nd','3rd'].map(function(p){
+    return '<div class="pcol"><div class="pair">'+
+      '<i class="us-c" style="height:'+(100*pf[p]/mx)+'%" data-tip="306ers scored '+pf[p]+' in the '+p+'"><b>'+pf[p]+'</b></i>'+
+      '<i class="them-c" style="height:'+(100*pa[p]/mx)+'%" data-tip="Opponents scored '+pa[p]+' in the '+p+'"><b>'+pa[p]+'</b></i></div><div class="lab">'+p+' period</div></div>'}).join('');
+  function worstStarts(){
+    var rows=[]; D.games.forEach(function(g){var sc=D.sched.filter(function(s){return s.n===g.n})[0];
+      if(!sc||sc.res!=='L')return;
+      var t=0,o=0; g.goals.forEach(function(x){if(x.per==='1st'){if(x.side==='T')t++;else o++}});
+      if(o-t>=3)rows.push({o:o,t:t,sc:sc,d:o-t})});
+    rows.sort(function(a,b){return b.d-a.d}).splice(2);
+    if(!rows.length)return '';
+    return (rows.length===1?'One of our losses, ':'Two of our losses, ')+rows.map(function(r){return r.sc.gf+'-'+r.sc.ga+' to '+r.sc.opp}).join(' and ')+', started with '+rows.map(function(r){return 'a '+r.o+'-'+r.t}).join(' and ')+' first period against.'}
+  var later_f=pf['2nd']+pf['3rd'], later_a=pa['2nd']+pa['3rd'];
+  function rec(filterFn){var w=0,l=0,gf=0,ga=0; played.filter(filterFn).forEach(function(s){if(s.res==='W')w++;else l++;gf+=s.gf;ga+=s.ga}); return {w:w,l:l,gf:gf,ga:ga,n:w+l}}
+  function row(label,r){return r.n?'<tr><td class="pl">'+esc(label)+'</td><td>'+r.w+'-'+r.l+'</td><td>'+r.gf+'-'+r.ga+'</td><td>'+(r.gf-r.ga>0?'+':'')+(r.gf-r.ga)+'</td></tr>':''}
+  var opps=[]; D.sched.forEach(function(s){if(opps.indexOf(s.opp)<0)opps.push(s.opp)});
+  var arenas=[]; D.sched.forEach(function(s){if(s.res&&arenas.indexOf(s.arena)<0)arenas.push(s.arena)});
+  function hr(m){var h=+m[1]; var pm=m[3]; if(pm==='PM'&&h!==12)h+=12; return h+ +m[2]/60}
+  function startH(s){var m=s.time.match(/(\d+):(\d+) (AM|PM)/); return hr([0,m[1],m[2],m[3]])}
+  var sp=D.spec;
+  $('#v-trends').innerHTML='<h2>Trends</h2><p class="lede">Where goals come from and where they go.</p>'+
+   '<div class="grid g2">'+
+    '<div class="card"><h3>Goals by period</h3><div class="legend"><span><i class="sw us-c"></i>306ers</span><span><i class="sw them-c"></i>Opponents</span></div><div class="per">'+pcols+'</div>'+
+     '<p class="note">In the first period we '+(pf['1st']<pa['1st']?'are outscored ':pf['1st']>pa['1st']?'outscore opponents ':'are even, ')+pf['1st']+'-'+pa['1st']+'. In the second and third we '+(later_f>later_a?'outscore opponents ':later_f<later_a?'are outscored ':'are even, ')+later_f+'-'+later_a+'. '+worstStarts()+'</p></div>'+
+    '<div class="card"><h3>Special teams and penalties</h3><div class="grid g2" style="gap:10px">'+
+     '<div class="tile"><b>'+sp.ppF+'-'+sp.ppA+'</b><span>Power-play goals, for and against</span></div>'+
+     '<div class="tile"><b>'+sp.shF+'-'+sp.shA+'</b><span>Shorthanded goals, for and against</span></div>'+
+     '<div class="tile"><b>'+sp.penF+'-'+sp.penA+'</b><span>Penalties, ours and theirs</span></div>'+
+     '<div class="tile"><b>'+(sp.penF*2)+'</b><span>Our penalty minutes</span></div></div>'+
+     '<p class="note">Counts come from the '+nSum+' game summaries.</p></div>'+
+   '</div>'+
+   '<div class="grid g2" style="margin-top:16px">'+
+    '<div class="card"><h3>Record splits</h3><div class="tablewrap" style="border:0"><table><thead><tr><th>Split</th><th>W-L</th><th>GF-GA</th><th>Diff</th></tr></thead><tbody>'+
+      row('Home',rec(function(s){return s.ha==='H'}))+row('Away',rec(function(s){return s.ha==='A'}))+
+      row('Weekday (Mon to Fri)',rec(function(s){var d=dt(s.date).getDay();return d>=1&&d<=5}))+row('Weekend (Sat and Sun)',rec(function(s){var d=dt(s.date).getDay();return d===0||d===6}))+
+      row('Before 6 PM start',rec(function(s){return startH(s)<18}))+row('6 to 8 PM start',rec(function(s){return startH(s)>=18&&startH(s)<20}))+row('8 PM or later start',rec(function(s){return startH(s)>=20}))+
+      '</tbody></table></div></div>'+
+    '<div class="card"><h3>By opponent</h3><div class="tablewrap" style="border:0"><table><thead><tr><th>Opponent</th><th>W-L</th><th>GF-GA</th><th>Diff</th></tr></thead><tbody>'+
+      opps.map(function(o){return row(o,rec(function(s){return s.opp===o}))}).join('')+'</tbody></table></div></div>'+
+   '</div>'+
+   '<div class="card" style="margin-top:16px"><h3>By rink</h3><div class="tablewrap" style="border:0"><table><thead><tr><th>Rink</th><th>W-L</th><th>GF-GA</th><th>Diff</th></tr></thead><tbody>'+
+      arenas.map(function(a){return row(arena(a),rec(function(s){return s.arena===a}))}).join('')+'</tbody></table></div><p class="note">Small samples: most rinks have one to three games so far.</p></div>';
+})();
+})();
+</script>
+</body>
+</html>

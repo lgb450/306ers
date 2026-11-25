@@ -1,0 +1,41 @@
+15779|1st|0:01|Matt Stephens|Slashing|2:00
+15821|2nd|14:27|Zach Duncan|Hooking|2:00
+15821|2nd|10:33|Zach Duncan|Hooking|2:00
+15821|3rd|5:51|Johnathan Bursey|High-Sticking (Accidental)|2:00
+15826|1st|2:27|Darryl Folkerson|Holding|2:00
+15826|1st|0:01|Darryl Folkerson|Hooking|2:00
+15842|2nd|9:29|Mitch Hagan|Boarding|2:00
+15842|3rd|2:49|Adam Lamoureux|Roughing|2:00
+15857|3rd|7:52|Matthew Cook|Hooking|2:00
+15871|1st|11:08|Luke Reimer|Holding|2:00
+15871|1st|3:33|Mark Mason|Goalie Interference|2:00
+15871|2nd|17:29|Matthew Briens|Holding|2:00
+15871|2nd|4:46|Russell Wazney|Roughing|2:00
+15871|3rd|10:55|Matt Stephens|Cross Checking|2:00
+15884|2nd|1:33|Ken Terpstra|Hooking|2:00
+15884|3rd|6:27|Adam Timmer|Hooking|2:00
+15906|2nd|5:47|Drew Anholt|Hooking|2:00
+15906|3rd|13:08|Kenton Haugrud|Tripping|2:00
+15919|2nd|12:37|Joel Manson|Tripping|2:00
+15919|2nd|11:07|Evan Ives|Body Check|2:00
+15919|2nd|9:37|Clifton O'Brien|Slashing|2:00
+15919|3rd|11:53|Darryl Folkerson|Tripping|2:00
+15931|2nd|6:22|Mike Leibel|Roughing|2:00
+15931|3rd|12:22|Lee Brown|Slashing|2:00
+15931|3rd|8:40|Matthew Briens|Roughing|2:00
+15931|3rd|6:43|Danny Arnold|Tripping|2:00
+15941|2nd|19:05|Ryan Matthyssen|Hooking|2:00
+15941|2nd|18:46|Mitch Lipon|Tripping|2:00
+15941|2nd|16:28|Tyson Walker|Tripping|2:00
+15941|2nd|8:45|Greg Hoffort|Tripping|2:00
+15941|3rd|13:49|Darryl Macdonald|Slashing|2:00
+15941|3rd|10:22|Michael Sokol|Slashing|2:00
+15941|3rd|9:04|Johnathan Bursey|Tripping|2:00
+15941|3rd|2:33|Mike Leibel|High-Sticking|2:00
+15952|1st|3:03|Mike Leibel|Hooking|2:00
+15952|2nd|7:18|Lee Brown|Roughing|2:00
+15952|3rd|10:07|Cody Cross|Slashing|2:00
+15952|3rd|9:14|Marshall Plandowski|Roughing|2:00
+15952|3rd|9:14|Adam Lamoureux|Roughing|2:00
+15952|3rd|0:01|Cody Cross|Roughing|2:00
+15952|3rd|0:01|Lee Brown|Roughing|2:00

@@ -1,0 +1,466 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>306ers Hockey</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@500;600;700&family=Barlow:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+/* Layout idea: a game-sheet. Big condensed numerals, ruled rows, one goal-light red accent, one blue for magnitude. */
+:root{
+  /* Logo palette: wheat green #087838 and gold #F8C008 */
+  --bg:#f3f7f3; --surface:#ffffff; --ink:#0f2418; --muted:#586a5f; --line:#d8e3da;
+  --brand:#087838; --accent:#f8c008; --heat:#087838; --good:#0b8a42; --mid:#f8c008; --bad:#d6453b; --them:#8a9a90;
+  --display:"Barlow Condensed","Arial Narrow",system-ui,sans-serif; --body:"Barlow",system-ui,-apple-system,"Segoe UI",sans-serif;
+  color-scheme:light;
+}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){
+  --bg:#08130d; --surface:#0f1f16; --ink:#e8f1ea; --muted:#9bb0a2; --line:#21392b;
+  --brand:#0a5a2b; --accent:#f8c008; --heat:#3fbf74; --good:#3fbf74; --mid:#e6b422; --bad:#ff7a70; --them:#7f9487; color-scheme:dark;}}
+:root[data-theme="dark"]{
+  --bg:#08130d; --surface:#0f1f16; --ink:#e8f1ea; --muted:#9bb0a2; --line:#21392b;
+  --brand:#0a5a2b; --accent:#f8c008; --heat:#3fbf74; --good:#3fbf74; --mid:#e6b422; --bad:#ff7a70; --them:#7f9487; color-scheme:dark;}
+*{box-sizing:border-box}
+html{-webkit-text-size-adjust:100%}
+body{margin:0;background:var(--bg);color:var(--ink);font:16px/1.5 var(--body);font-variant-numeric:tabular-nums}
+a{color:var(--heat)}
+h1,h2,h3{font-family:var(--display);font-weight:700;letter-spacing:.01em;margin:0;text-wrap:balance}
+h2{font-size:1.9rem;line-height:1.1}
+h3{font-size:1.2rem;text-transform:uppercase;letter-spacing:.06em;color:var(--muted);font-weight:600}
+.wrap{max-width:1080px;margin:0 auto;padding:0 16px}
+header.top{background:var(--brand);color:#fff;border-bottom:5px solid var(--accent)}
+.top .wrap{display:flex;gap:16px 28px;flex-wrap:wrap;align-items:flex-end;justify-content:space-between;padding-top:20px;padding-bottom:16px}
+.brand{font-family:var(--display);font-weight:700;font-size:3.4rem;line-height:.9;letter-spacing:.01em}
+.brand small{display:block;font-size:1rem;font-weight:500;letter-spacing:.14em;text-transform:uppercase;opacity:.75;margin-top:6px}
+.rec{display:flex;gap:22px;flex-wrap:wrap}
+.rec div{font-family:var(--display);text-transform:uppercase;letter-spacing:.08em;font-size:.85rem;opacity:.95}
+.rec b{display:block;font-size:2.1rem;letter-spacing:0;line-height:1;font-weight:700}
+nav.tabs{background:var(--surface);border-bottom:1px solid var(--line);position:sticky;top:0;z-index:5}
+nav.tabs .wrap{display:flex;gap:4px;overflow-x:auto;padding-top:0;padding-bottom:0}
+nav.tabs a{font-family:var(--display);font-weight:600;font-size:1.15rem;letter-spacing:.06em;text-transform:uppercase;color:var(--muted);text-decoration:none;padding:12px 14px;border-bottom:3px solid transparent;white-space:nowrap}
+nav.tabs a[aria-current="page"]{color:var(--ink);border-bottom-color:var(--accent)}
+nav.tabs a:focus-visible,button:focus-visible,summary:focus-visible,th button:focus-visible{outline:3px solid var(--heat);outline-offset:-3px}
+main{padding:24px 0 56px}
+section.view{display:none}
+section.view.on{display:block}
+.grid{display:grid;gap:16px}
+.g2{grid-template-columns:repeat(auto-fit,minmax(300px,1fr))}
+.g3{grid-template-columns:repeat(auto-fit,minmax(200px,1fr))}
+.card{background:var(--surface);border:1px solid var(--line);border-radius:6px;padding:16px;min-width:0}
+.card h3{margin-bottom:10px}
+.lede{color:var(--muted);max-width:68ch;margin:6px 0 20px}
+.note{color:var(--muted);font-size:.88rem;max-width:78ch;margin:12px 0 0}
+.stack{display:flex;flex-direction:column;gap:16px}
+.tile b{display:block;font-family:var(--display);font-size:2.6rem;line-height:1;font-weight:700}
+.tile span{color:var(--muted);font-size:.9rem}
+.pill{display:inline-block;min-width:1.7em;text-align:center;font-family:var(--display);font-weight:700;font-size:.95rem;letter-spacing:.04em;padding:1px 7px;border-radius:3px;color:#fff}
+.pill.W{background:var(--good)} .pill.L{background:var(--bad)} .pill.up{background:transparent;color:var(--muted);border:1px solid var(--line)}
+.strip{display:flex;gap:8px;flex-wrap:wrap}
+.strip .g{border:1px solid var(--line);border-radius:6px;padding:8px 10px;min-width:104px;background:var(--bg)}
+.strip .g small{display:block;color:var(--muted);font-size:.78rem;line-height:1.2}
+.strip .g b{font-family:var(--display);font-size:1.3rem}
+.next{display:grid;gap:4px}
+.next .big{font-family:var(--display);font-size:2.2rem;font-weight:700;line-height:1}
+.next .when{color:var(--muted)}
+ol.rank,ul.plain{list-style:none;margin:0;padding:0}
+ol.rank li{display:flex;justify-content:space-between;gap:12px;padding:6px 0;border-top:1px solid var(--line)}
+ol.rank li:first-child{border-top:0}
+ol.rank .n{font-family:var(--display);font-weight:700;font-size:1.25rem}
+.tablewrap{overflow-x:auto;border:1px solid var(--line);border-radius:6px;background:var(--surface)}
+table{border-collapse:collapse;width:100%;font-size:.95rem}
+th,td{padding:7px 10px;text-align:right;white-space:nowrap;border-bottom:1px solid var(--line)}
+th:first-child,td:first-child{text-align:left}
+th.l,td.l{text-align:left}
+thead th{font-family:var(--display);text-transform:uppercase;letter-spacing:.06em;font-weight:600;color:var(--muted);font-size:.95rem;background:var(--surface);position:sticky;top:0}
+th button{all:unset;cursor:pointer;display:block;width:100%;text-align:inherit}
+th[aria-sort] button::after{content:" ▼";font-size:.7em;color:var(--heat)}
+th[aria-sort="ascending"] button::after{content:" ▲"}
+tbody tr:last-child td{border-bottom:0}
+tr.sep td{background:var(--bg);font-family:var(--display);text-transform:uppercase;letter-spacing:.08em;color:var(--muted);font-size:.85rem}
+td.pl{font-weight:600}
+td.num{font-family:var(--display);font-size:1.1rem}
+.tag{font-size:.72rem;font-weight:600;letter-spacing:.06em;text-transform:uppercase;color:var(--muted);border:1px solid var(--line);border-radius:3px;padding:0 4px;margin-left:6px}
+.boxes{display:inline-flex;gap:2px;vertical-align:middle}
+.boxes i{display:block;width:10px;height:18px;border-radius:2px;background:var(--surface);border:1px solid var(--line)}
+.boxes i.b1{background:var(--mid);border-color:var(--mid)}
+.boxes i.b2{background:var(--good);border-color:var(--good)}
+.sw.b0{background:var(--surface);border:1px solid var(--line)} .sw.b1{background:var(--mid)} .sw.b2{background:var(--good)}
+td.sc{font-family:var(--display);font-size:1.1rem}
+h3 a.jump{color:inherit;text-decoration:none;border-bottom:2px solid var(--accent)}
+h3 a.jump:hover{color:var(--heat)}
+h3 a.jump::after{content:" \2192"}
+.legend{display:flex;gap:14px;flex-wrap:wrap;align-items:center;color:var(--muted);font-size:.85rem;margin:8px 0}
+.legend .sw{display:inline-block;width:12px;height:12px;border-radius:2px;vertical-align:-1px;margin-right:5px}
+.ctl{display:flex;gap:8px;flex-wrap:wrap;margin:0 0 12px}
+.ctl button{font:600 .95rem var(--body);background:var(--surface);color:var(--ink);border:1px solid var(--line);border-radius:4px;padding:6px 12px;cursor:pointer}
+.ctl button[aria-pressed="true"]{background:var(--ink);color:var(--bg);border-color:var(--ink)}
+.matrix td,.matrix th{padding:0;border:0;text-align:center}
+.matrix .cell{width:30px;height:28px;font-family:var(--display);font-size:1rem;display:flex;align-items:center;justify-content:center;margin:1px;border-radius:2px;background:color-mix(in srgb,var(--heat) calc(var(--t)*100%),var(--bg));color:var(--ink)}
+.matrix .cell.on{color:#fff}
+.matrix .cell.z{background:transparent}
+.matrix .rowh{position:sticky;left:0;background:var(--surface);text-align:right;padding:0 8px;font-size:.85rem;white-space:nowrap;z-index:1;min-width:150px}
+.matrix .colh{height:132px;vertical-align:bottom;font-size:.85rem}
+.matrix .colh span{display:block;writing-mode:vertical-rl;transform:rotate(180deg);white-space:nowrap;margin:0 auto 4px;font-weight:500}
+.matrix .tot{font-family:var(--display);color:var(--muted);font-size:.95rem;padding:0 8px}
+.matrix .cell.self{background:#000;outline:1px solid var(--line)}
+.matrix th.hl{background:var(--accent);color:#0f2418}
+.matrix .rowh.hl{background:var(--accent)}
+.matrix .axis{font-family:var(--display);text-transform:uppercase;letter-spacing:.08em;color:var(--muted);font-size:.9rem;padding:4px 8px}
+.matrix .axis.c{text-align:center;border-bottom:1px solid var(--line)}
+.matrix .corner{vertical-align:bottom;text-align:right;padding:0 8px 6px;font-family:var(--display);text-transform:uppercase;letter-spacing:.08em;color:var(--muted);font-size:.9rem;position:sticky;left:0;background:var(--surface);z-index:1}
+.how{background:color-mix(in srgb,var(--accent) 16%,var(--surface));border:1px solid color-mix(in srgb,var(--accent) 55%,var(--line));border-radius:6px;padding:10px 14px;margin:0 0 14px;max-width:80ch}
+.scale{display:inline-flex;align-items:center;gap:4px}
+.scale i{display:inline-block;width:18px;height:12px;border-radius:2px;background:color-mix(in srgb,var(--heat) calc(var(--t)*100%),var(--bg))}
+.bars{display:grid;gap:6px}
+.bar{display:grid;grid-template-columns:150px 1fr 44px;gap:8px;align-items:center;font-size:.92rem}
+.bar .track{display:flex;height:12px;background:var(--bg);border-radius:2px;overflow:hidden;gap:2px}
+.bar .track i{display:block;height:100%}
+.bar .v{font-family:var(--display);text-align:right;font-size:1.05rem}
+.gcard{background:var(--surface);border:1px solid var(--line);border-left:5px solid var(--bad);border-radius:6px;padding:14px 16px}
+.gcard.W{border-left-color:var(--good)}
+.gcard .hd{display:flex;gap:10px 16px;flex-wrap:wrap;align-items:baseline;justify-content:space-between}
+.gcard .sc{font-family:var(--display);font-size:2rem;font-weight:700;line-height:1}
+.gcard .meta{color:var(--muted);font-size:.9rem}
+.gcard h3.head{text-transform:none;letter-spacing:0;color:var(--ink);font-size:1.45rem;margin:6px 0 4px}
+.gcard p{margin:0 0 8px;max-width:70ch}
+details summary{cursor:pointer;font-weight:600;color:var(--heat);padding:4px 0}
+.log{margin:8px 0 0;font-size:.9rem}
+.log li{display:grid;grid-template-columns:70px 1fr;gap:8px;padding:3px 0;border-top:1px solid var(--line)}
+.log .us{font-weight:600}
+.log .them{color:var(--muted)}
+.log small{color:var(--muted)}
+.per{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-top:28px}
+.pcol{display:grid;gap:6px}
+.pcol .pair{display:flex;align-items:flex-end;gap:6px;height:130px}
+.pcol .pair i{display:block;flex:1;border-radius:2px 2px 0 0;position:relative;min-height:2px}
+.pcol .pair i b{position:absolute;top:-1.35em;left:0;right:0;text-align:center;font-family:var(--display);font-size:1rem;font-weight:600}
+.pcol .lab{text-align:center;font-family:var(--display);text-transform:uppercase;letter-spacing:.06em;color:var(--muted)}
+.us-c{background:var(--heat)} .them-c{background:var(--them)}
+.tip{position:fixed;z-index:20;pointer-events:none;background:var(--ink);color:var(--bg);font-size:.85rem;padding:6px 9px;border-radius:4px;max-width:260px;box-shadow:0 4px 14px rgba(0,0,0,.25);display:none}
+.hot{color:var(--good);font-weight:700}
+.sub{color:var(--muted);font-weight:400}
+footer{border-top:1px solid var(--line);color:var(--muted);font-size:.85rem;padding:18px 0 40px}
+@media (max-width:560px){
+  .brand{font-size:2.6rem}
+  .bar{grid-template-columns:110px 1fr 36px}
+  .matrix .rowh{min-width:118px;font-size:.8rem}
+}
+@media (prefers-reduced-motion:reduce){*{scroll-behavior:auto!important;transition:none!important}}
+</style>
+</head>
+<body>
+<header class="top"><div class="wrap">
+  <div class="brand">306ers<small id="sub"></small></div>
+  <div class="rec" id="rec"></div>
+</div></header>
+<nav class="tabs" aria-label="Sections"><div class="wrap" id="tabs"></div></nav>
+<main class="wrap">
+  <section class="view" id="v-overview"></section>
+  <section class="view" id="v-player-stats"></section>
+  <section class="view" id="v-connections"></section>
+  <section class="view" id="v-trends"></section>
+  <section class="view" id="v-game-recaps"></section>
+  <section class="view" id="v-schedule"></section>
+</main>
+<footer><div class="wrap">
+  Numbers come from the public CMHA pages (team stats, schedule and game summaries) through game <span id="asof-n"></span>, <span id="asof-d"></span>. Skater totals computed from the game summaries match the CMHA stats page. <span id="nosum"></span> CMHA does not publish who dressed for each game, so a 0 for a player in a game can mean a quiet night or a night off.
+</div></footer>
+<div class="tip" id="tip" role="tooltip"></div>
+<script id="data" type="application/json">__DATA__</script>
+<script>
+(function(){
+var D = JSON.parse(document.getElementById('data').textContent);
+var $ = function(s,r){return (r||document).querySelector(s)};
+var esc = function(s){return String(s).replace(/[&<>"']/g,function(c){return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]})};
+var MONTHS=['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'], DOW=['Sun','Mon','Tue','Wed','Thu','Fri','Sat'];
+function dt(s){var p=s.split('-');return new Date(+p[0],+p[1]-1,+p[2])}
+function dlabel(s){var d=dt(s);return DOW[d.getDay()]+', '+MONTHS[d.getMonth()]+' '+d.getDate()}
+function dshort(s){var d=dt(s);return MONTHS[d.getMonth()]+' '+d.getDate()}
+function arena(c){return D.arenas[c]||c}
+function last(n){return n.split(' ').slice(-1)[0]}
+function oppName(o){return o}
+var goalieNames = D.goalies.map(function(g){return g.name});
+
+/* ---------- derived numbers ---------- */
+var played = D.sched.filter(function(s){return s.res});
+var upcoming = D.sched.filter(function(s){return !s.res});
+var nSum = D.games.length;
+var sumNs = D.games.map(function(g){return g.n});
+var noSum = played.filter(function(s){return sumNs.indexOf(s.n)<0});
+(function(){var l=played[played.length-1];
+  $('#asof-n').textContent=l?l.n:0; $('#asof-d').textContent=l?dshort(l.date):'';
+  $('#nosum').textContent=noSum.length?(noSum.length===1?'Game '+noSum[0].n+' (a '+noSum[0].gf+'-'+noSum[0].ga+' '+(noSum[0].res==='W'?'win':'loss')+(noSum[0].ha==='H'?' vs ':' at ')+noSum[0].opp+') has no game summary, so it appears in the record and schedule but not in the goal-by-goal analysis.'
+    :noSum.length+' games have no game summary, so they appear in the record and schedule but not in the goal-by-goal analysis.'):'';
+ })();
+function plural(n,w){return n+' '+(n===1?w:w+(/s$/.test(w)?'es':'s'))}
+var W = played.filter(function(s){return s.res==='W'}).length, L = played.length-W;
+var GF = played.reduce(function(a,s){return a+s.gf},0), GA = played.reduce(function(a,s){return a+s.ga},0);
+var P = D.players.filter(function(p){return goalieNames.indexOf(p.name)<0 || p.pts>0});
+var gameLabel = {}; D.doneNs.forEach(function(n,i){gameLabel[i]=n});
+
+/* ---------- tooltip ---------- */
+var tip = $('#tip');
+document.addEventListener('mouseover',function(e){var t=e.target.closest('[data-tip]'); if(!t){tip.style.display='none';return}
+  tip.textContent=t.getAttribute('data-tip'); tip.style.display='block'; place(e)});
+document.addEventListener('mousemove',function(e){if(tip.style.display==='block')place(e)});
+document.addEventListener('mouseout',function(e){if(!e.relatedTarget||!e.relatedTarget.closest||!e.relatedTarget.closest('[data-tip]'))tip.style.display='none'});
+function place(e){var w=tip.offsetWidth,h=tip.offsetHeight,x=e.clientX+14,y=e.clientY+14;
+  if(x+w>innerWidth-8)x=innerWidth-w-8; if(y+h>innerHeight-8)y=e.clientY-h-12; tip.style.left=Math.max(8,x)+'px'; tip.style.top=Math.max(8,y)+'px'}
+
+/* ---------- header ---------- */
+$('#sub').textContent = 'Division 4 · 2026/27 · Calgary Men’s Hockey Association';
+$('#rec').innerHTML =
+  '<div><b>'+W+'-'+L+'</b>Record</div>'+
+  '<div><b>'+GF+'-'+GA+'</b>Goals for-against</div>'+
+  '<div><b>'+played.length+'/'+D.sched.length+'</b>Games played</div>';
+
+/* ---------- tabs / routing ---------- */
+var TABS=[['overview','Overview'],['player-stats','Player Stats'],['connections','Connections'],['trends','Trends'],['game-recaps','Game Recaps'],['schedule','Schedule']];
+$('#tabs').innerHTML = TABS.map(function(t){return '<a href="#'+t[0]+'" data-t="'+t[0]+'">'+t[1]+'</a>'}).join('');
+function route(){var h=(location.hash||'#overview').slice(1); if(h==='players')h='player-stats'; if(h==='games')h='game-recaps'; if(!TABS.some(function(t){return t[0]===h}))h='overview';
+  TABS.forEach(function(t){var on=t[0]===h; $('#v-'+t[0]).classList.toggle('on',on);
+    var a=$('#tabs a[data-t="'+t[0]+'"]'); if(on)a.setAttribute('aria-current','page'); else a.removeAttribute('aria-current')});}
+addEventListener('hashchange',function(){route();scrollTo(0,0)}); route();
+
+/* ---------- OVERVIEW ---------- */
+(function(){
+  var nx = upcoming[0] || null;
+  var h2h = nx ? played.filter(function(s){return s.opp===nx.opp}) : [];
+  var h2hTxt = h2h.length ? h2h.map(function(s){return '<span class="pill '+s.res+'">'+s.res+'</span> '+s.gf+'-'+s.ga+' on '+dshort(s.date)}).join(' &nbsp; ') : 'First meeting this season';
+  var recent = played.slice(-6).reverse().map(function(s){
+    return '<div class="g"><small>'+dshort(s.date)+' '+(s.ha==='H'?'vs':'@')+' '+esc(s.opp)+'</small><b><span class="pill '+s.res+'">'+s.res+'</span> '+s.gf+'-'+s.ga+'</b></div>'}).join('');
+  function top(key,n){return P.slice().sort(function(a,b){return b[key]-a[key]||b.pts-a.pts}).slice(0,n)}
+  function list(arr,key){return '<ol class="rank">'+arr.map(function(p){return '<li><span>'+esc(p.name)+'</span><span class="n">'+p[key]+'</span></li>'}).join('')+'</ol>'}
+  var hot = P.filter(function(p){return p.gp>0}).slice().sort(function(a,b){return b.last5-a.last5||b.pts-a.pts}).slice(0,5);
+  var awards = buildAwards();
+  $('#v-overview').innerHTML =
+   '<h2>Where we stand</h2><p class="lede">'+winLossLine()+'</p>'+
+   '<div class="grid g2">'+
+    (nx?'<div class="card next"><h3>Next game</h3><div class="big">'+(nx.ha==='H'?'vs':'@')+' '+esc(nx.opp)+'</div>'+
+      '<div class="when">'+dlabel(nx.date)+' · '+nx.time+' · '+esc(arena(nx.arena))+' ('+(nx.ha==='H'?'home':'away')+')</div>'+
+      '<div style="margin-top:8px"><span class="sub">Earlier this season:</span> '+h2hTxt+'</div>'+
+      (nx.gid?'<div style="margin-top:8px"><a href="https://cmhahockey.com/game/'+nx.gid+'/preview" rel="noopener">CMHA game preview</a></div>':'')+'</div>'
+     :'<div class="card next"><h3>Next game</h3><div class="big">Season complete</div><div class="when">No games left on the schedule.</div></div>')+
+    '<div class="card"><h3>Last six</h3><div class="strip">'+recent+'</div></div>'+
+   '</div>'+
+   '<div class="grid g3" style="margin-top:16px">'+
+    '<div class="card"><h3><a class="jump" href="#player-stats" data-sort="pts">Points</a></h3>'+list(top('pts',5),'pts')+'</div>'+
+    '<div class="card"><h3><a class="jump" href="#player-stats" data-sort="g">Goals</a></h3>'+list(top('g',5),'g')+'</div>'+
+    '<div class="card"><h3><a class="jump" href="#player-stats" data-sort="a">Assists</a></h3>'+list(top('a',5),'a')+'</div>'+
+   '</div>'+
+   '<div class="grid g2" style="margin-top:16px">'+
+    '<div class="card"><h3>Hot right now</h3><p class="sub" style="margin:0 0 8px">Points over the last five games with a game summary.</p><ol class="rank">'+
+      hot.map(function(p){return '<li><span>'+esc(p.name)+' <span class="sub">'+p.by.slice(-5).join(' · ')+'</span></span><span class="n">'+p.last5+'</span></li>'}).join('')+'</ol></div>'+
+    '<div class="card"><h3>Season awards</h3><ul class="plain">'+awards.map(function(a){return '<li style="padding:6px 0;border-top:1px solid var(--line)"><b>'+a[0]+'</b> '+a[1]+'</li>'}).join('')+'</ul></div>'+
+   '</div>';
+  $('#v-overview').addEventListener('click',function(e){var a=e.target.closest('a[data-sort]'); if(a&&D.setSort)D.setSort(a.getAttribute('data-sort'))});
+  function winLossLine(){
+    var close = played.filter(function(s){return Math.abs(s.gf-s.ga)<=1}).length;
+    var bigW = played.filter(function(s){return s.res==='W'&&s.gf-s.ga>=3}).length;
+    var w=played.filter(function(s){return s.res==='W'}).length, l=played.length-w;
+    if(!played.length) return 'No games played yet.';
+    return plural(w,'win')+' and '+plural(l,'loss')+' through '+plural(played.length,'game')+'. '+plural(bigW,'win')+' by three goals or more, and '+plural(close,'game')+' decided by a single goal.'}
+  function buildAwards(){
+    var A=[]; var s=function(k){return P.slice().sort(function(a,b){return b[k]-a[k]})};
+    var g=s('g')[0], a=s('a')[0], p=s('pts')[0];
+    A.push(['Sniper',esc(g.name)+', '+g.g+' goals']);
+    A.push(['Playmaker',esc(a.name)+', '+a.a+' assists']);
+    A.push(['Points leader',esc(p.name)+', '+p.pts+' points in '+p.gp+' games']);
+    var eff=P.filter(function(x){return x.gp>=4}).slice().sort(function(x,y){return y.g/y.gp-x.g/x.gp})[0];
+    A.push(['Goals per game (4+ GP)',esc(eff.name)+', '+(eff.g/eff.gp).toFixed(2)]);
+    var maxp=Math.max.apply(null,P.map(function(x){return x.pim})); var pb=P.filter(function(x){return x.pim===maxp});
+    A.push(['Penalty box regulars',pb.map(function(x){return esc(x.name)}).join(', ')+' ('+maxp+' PIM each)']);
+    A.push(['Hat tricks','We have '+D.hat.T.length+'; opponents have '+D.hat.O.length+' against us']);
+    return A}
+})();
+
+/* ---------- PLAYER STATS ---------- */
+(function(){
+  var cols=[['name','Player','l'],['gp','GP'],['g','G'],['a','A'],['pts','PTS'],['ppg','P/GP'],['pp','PP'],['sh','SH'],['pim','PIM'],['last5','L5'],['games','By game']];
+  var rows=P.map(function(p){var o=Object.assign({},p);o.ppg=p.gp?p.pts/p.gp:0;return o});
+  var skaters=rows.filter(function(p){return goalieNames.indexOf(p.name)<0&&p.gp>0});
+  var range={}; ['g','a','pts','ppg','pp','sh','pim','last5'].forEach(function(k){var v=skaters.map(function(p){return p[k]});range[k]=[Math.min.apply(null,v),Math.max.apply(null,v)]});
+  /* Green = best on the team, red = lowest. PIM runs the other way (fewer is better). PP and SH only turn green when above 0. */
+  function shade(k,v,isG){
+    if(isG||!range[k])return '';
+    var lo=range[k][0],hi=range[k][1]; if(hi===lo)return '';
+    var t=(v-lo)/(hi-lo);
+    if(k==='pim')t=1-t;
+    if(k==='pp'||k==='sh')return v>0?' style="background:color-mix(in srgb,var(--good) '+Math.round(22+38*t)+'%,var(--surface))"':'';
+    var c=t>=0.5?'var(--good)':'var(--bad)', s=Math.abs(t-0.5)*2;
+    return ' style="background:color-mix(in srgb,'+c+' '+Math.round(s*58)+'%,var(--surface))"'}
+  var key='pts',dir=-1;
+  function sched(n){return D.sched.filter(function(s){return s.n===n})[0]}
+  function td(k,v,txt,isG,cls){return '<td class="'+(cls||'')+'"'+shade(k,v,isG)+'>'+txt+'</td>'}
+  function draw(){
+    var sorted=rows.slice().sort(function(a,b){
+      if(key==='name')return dir*a.name.localeCompare(b.name);
+      return dir*((a[key]||0)-(b[key]||0))||b.pts-a.pts||a.name.localeCompare(b.name)});
+    var head='<tr>'+cols.map(function(c){var s=(c[0]===key)?' aria-sort="'+(dir<0?'descending':'ascending')+'"':'';
+      if(c[0]==='games')return '<th class="l">'+c[1]+'</th>';
+      return '<th class="'+(c[2]||'')+'"'+s+'><button data-k="'+c[0]+'">'+c[1]+'</button></th>'}).join('')+'</tr>';
+    var body=sorted.map(function(p){
+      var isG=goalieNames.indexOf(p.name)>=0;
+      var boxes='<span class="boxes">'+p.by.map(function(v,i){var c=v>=3?'b2':(v>=1?'b1':'b0');
+        return '<i class="'+c+'" data-tip="Game '+D.doneNs[i]+' vs '+esc(sched(D.doneNs[i]).opp)+': '+v+' pt'+(v===1?'':'s')+'"></i>'}).join('')+'</span>';
+      return '<tr><td class="pl">'+esc(p.name)+(isG?'<span class="tag">G</span>':'')+'</td><td>'+p.gp+'</td>'+
+        td('g',p.g,p.g,isG,'num')+td('a',p.a,p.a,isG,'num')+td('pts',p.pts,'<b>'+p.pts+'</b>',isG,'num')+td('ppg',p.ppg,p.ppg.toFixed(2),isG)+
+        td('pp',p.pp,p.pp,isG)+td('sh',p.sh,p.sh,isG)+td('pim',p.pim,p.pim,isG)+td('last5',p.last5,p.last5,isG,'num')+'<td class="l">'+boxes+'</td></tr>'}).join('');
+    $('#ptable').innerHTML='<thead>'+head+'</thead><tbody>'+body+'</tbody>';
+  }
+  D.setSort=function(k){key=k;dir=(k==='name')?1:-1;draw()};
+  var gl=D.goalies.map(function(g){return '<tr><td class="pl">'+esc(g.name)+'</td><td>'+g.gp+'</td><td>'+g.w+'</td><td>'+g.l+'</td><td>'+g.t+'</td><td>'+g.ga+'</td><td class="num">'+g.gaa.toFixed(2)+'</td><td>'+g.so+'</td></tr>'}).join('');
+  $('#v-player-stats').innerHTML='<h2>Player Stats</h2><p class="lede">Click a column heading to sort.</p>'+
+   '<div class="legend"><span><i class="sw" style="background:var(--good)"></i>Best on the team</span><span><i class="sw" style="background:var(--bad)"></i>Lowest on the team</span><span class="sub">PIM is reversed: fewer minutes is green.</span></div>'+
+   '<div class="legend"><b>By game</b><span><i class="sw b0"></i>0 points or no data</span><span><i class="sw b1"></i>1 or 2 points</span><span><i class="sw b2"></i>3 or more points</span></div>'+
+   '<div class="tablewrap"><table id="ptable"></table></div>'+
+   '<p class="note">By game shows each of the '+nSum+' games with a summary, oldest on the left. P/GP is points per game played. PP and SH are power-play and shorthanded goals, and turn green when above zero. L5 is points over the last five games with a summary. Goalies appear in the skater table only if they have points.</p>'+
+   '<h3 style="margin:24px 0 8px">Goalies</h3><div class="tablewrap"><table><thead><tr><th>Goalie</th><th>GP</th><th>W</th><th>L</th><th>T</th><th>GA</th><th>GAA</th><th>SO</th></tr></thead><tbody>'+gl+'</tbody></table></div>';
+  $('#v-player-stats').addEventListener('click',function(e){var b=e.target.closest('th button'); if(!b)return;
+    var k=b.getAttribute('data-k'); if(k===key)dir=-dir; else{key=k;dir=(k==='name')?1:-1} draw()});
+  draw();
+})();
+
+/* ---------- CONNECTIONS ---------- */
+(function(){
+  var mode='all';
+  var ord=D.order.slice().sort(function(a,b){return a.localeCompare(b)});   /* A to Z by first name, same on both axes */
+  function val(c){return mode==='all'?c[0]+c[1]:c[0]}
+  var top=null; Object.keys(D.cells).forEach(function(k){var c=D.cells[k],v=c[0]+c[1]; if(!top||v>top.v)top={k:k,v:v}});
+  var tp=top.k.split('>');
+  function drawMatrix(){
+    var mx=1; Object.keys(D.cells).forEach(function(k){mx=Math.max(mx,val(D.cells[k]))});
+    var colT={},rowT={}; ord.forEach(function(n){colT[n]=0;rowT[n]=0});
+    Object.keys(D.cells).forEach(function(k){var p=k.split('>');var v=val(D.cells[k]);rowT[p[0]]+=v;colT[p[1]]+=v});
+    var h='<thead><tr><th class="corner" rowspan="2">Gave the assist ↓</th><th class="axis c" colspan="'+ord.length+'">Scored the goal →</th><th></th></tr>'+
+      '<tr>'+ord.map(function(n){return '<th class="colh" data-c="'+esc(n)+'"><span>'+esc(n)+'</span></th>'}).join('')+'<th class="tot colh"><span>Total assists</span></th></tr></thead><tbody>';
+    ord.forEach(function(r){
+      h+='<tr><th class="rowh" data-r="'+esc(r)+'">'+esc(r)+'</th>';
+      ord.forEach(function(c){
+        if(r===c){h+='<td><div class="cell self" data-r="'+esc(r)+'" data-c="'+esc(c)+'" aria-hidden="true"></div></td>';return}
+        var cell=D.cells[r+'>'+c]; var v=cell?val(cell):0;
+        if(!v){h+='<td><div class="cell z" data-r="'+esc(r)+'" data-c="'+esc(c)+'"></div></td>';return}
+        var t=0.14+0.86*(v/mx);
+        var n=cell[0]+cell[1], tt=r+' assisted '+n+' of '+c+'’s goals ('+cell[0]+' primary, '+cell[1]+' secondary)';
+        h+='<td><div class="cell'+(t>0.55?' on':'')+'" style="--t:'+t.toFixed(2)+'" data-r="'+esc(r)+'" data-c="'+esc(c)+'" data-tip="'+esc(tt)+'">'+v+'</div></td>'});
+      h+='<td class="tot">'+rowT[r]+'</td></tr>'});
+    h+='<tr><th class="rowh">Total assists received</th>'+ord.map(function(c){return '<td class="tot">'+colT[c]+'</td>'}).join('')+'<td></td></tr></tbody>';
+    $('#mx').innerHTML=h}
+  var links=[]; (function(){
+    var m={}; Object.keys(D.cells).forEach(function(k){var p=k.split('>'); var key=[p[0],p[1]].sort().join('|'); m[key]=(m[key]||0)+D.cells[k][0]+D.cells[k][1]});
+    links=Object.keys(m).map(function(k){return {p:k.split('|'),n:m[k]}}).sort(function(a,b){return b.n-a.n}).slice(0,8)})();
+  var maxP=Math.max.apply(null,D.players.map(function(p){return p.pts}));
+  var G2='color-mix(in srgb,var(--heat) 45%,var(--bg))';
+  var pb=D.players.filter(function(p){return p.pts>0&&goalieNames.indexOf(p.name)<0}).sort(function(a,b){return b.pts-a.pts||b.g-a.g}).slice(0,16).map(function(p){
+    var seg=[[p.g,'var(--accent)','goals'],[p.a1,'var(--heat)','primary assists'],[p.a2,G2,'secondary assists']];
+    return '<div class="bar"><span>'+esc(p.name)+'</span><div class="track" style="width:'+(100*p.pts/maxP).toFixed(1)+'%">'+seg.map(function(s){
+      return s[0]?'<i style="flex:'+s[0]+';background:'+s[1]+'" data-tip="'+esc(p.name)+': '+s[0]+' '+s[2]+'"></i>':''}).join('')+'</div><span class="v">'+p.pts+'</span></div>'}).join('');
+  $('#v-connections').innerHTML='<h2>Who sets up who</h2>'+
+   '<div class="how"><b>How to read it.</b> Find the player who gave the assist down the left side, then follow that row across to the player who scored. The number is how many of that scorer’s goals the passer assisted. Example: <b>'+esc(tp[0])+'</b> assisted <b>'+top.v+'</b> of <b>'+esc(tp[1])+'</b>’s goals. A black square is a player matched with himself.</div>'+
+   '<div class="ctl" role="group" aria-label="Assist type"><button data-m="all" aria-pressed="true">All assists</button><button data-m="primary" aria-pressed="false">Primary assists only</button></div>'+
+   '<div class="legend"><span class="scale"><span>Fewer</span><i style="--t:.14"></i><i style="--t:.35"></i><i style="--t:.6"></i><i style="--t:1"></i><span>More</span></span><span><i class="sw" style="background:#000"></i>Same player</span></div>'+
+   '<div class="tablewrap"><table class="matrix" id="mx"></table></div>'+
+   '<p class="note">Players are listed A to Z by first name on both sides. Hover or tap a square to see the exact count. The matrix only counts goals: a good pass that did not end in a goal does not show up. Covers the '+nSum+' games with a summary.</p>'+
+   '<div class="grid g2" style="margin-top:20px">'+
+    '<div class="card"><h3>Best connections</h3><p class="sub" style="margin:0 0 8px">Goals where both players were on the scoresheet together, as scorer or either assist.</p><ol class="rank">'+links.map(function(l){return '<li><span>'+esc(l.p[0])+' &amp; '+esc(l.p[1])+'</span><span class="n">'+l.n+'</span></li>'}).join('')+'</ol></div>'+
+    '<div class="card"><h3>Repeat trios</h3><p class="sub" style="margin:0 0 8px">The same three players on one goal.</p><ol class="rank">'+D.trios.slice(0,6).map(function(t){return '<li><span>'+t.p.map(esc).join(', ')+'</span><span class="n">'+t.n+'</span></li>'}).join('')+'</ol><p class="note">Good candidates to keep together, though goals are a small sample.</p></div>'+
+   '</div>'+
+   '<div class="card" style="margin-top:16px"><h3>Goals and assists by player</h3><div class="legend"><span><i class="sw" style="background:var(--accent)"></i>Goals</span><span><i class="sw" style="background:var(--heat)"></i>Primary assists</span><span><i class="sw" style="background:'+G2+'"></i>Secondary assists</span></div><div class="bars">'+pb+'</div></div>';
+  $('#v-connections').addEventListener('click',function(e){var b=e.target.closest('[data-m]'); if(!b)return; mode=b.getAttribute('data-m');
+    [].forEach.call($('#v-connections').querySelectorAll('[data-m]'),function(x){x.setAttribute('aria-pressed',x===b)}); drawMatrix()});
+  /* hover a square to light up its row and column headings */
+  $('#v-connections').addEventListener('mouseover',function(e){
+    var c=e.target.closest('.cell[data-r]'); var hs=document.querySelectorAll('#mx th.hl'); [].forEach.call(hs,function(x){x.classList.remove('hl')});
+    if(!c)return; var r=c.getAttribute('data-r'), k=c.getAttribute('data-c');
+    [].forEach.call(document.querySelectorAll('#mx th[data-r],#mx th[data-c]'),function(x){
+      if(x.getAttribute('data-r')===r||x.getAttribute('data-c')===k)x.classList.add('hl')})});
+  drawMatrix();
+})();
+
+/* ---------- GAMES ---------- */
+(function(){
+  var s=function(n){return D.sched.filter(function(x){return x.n===n})[0]};
+  var cards=D.games.slice().reverse().map(function(g){
+    var sc=s(g.n), res=sc.res;
+    var goals=g.goals.slice().sort(function(a,b){var o={'1st':0,'2nd':1,'3rd':2}; function t(x){var p=x.time.split(':');return o[x.per]*1200+1200-(+p[0]*60+ +p[1])} return t(a)-t(b)});
+    var t=0,o=0;
+    var gl=goals.map(function(x){ if(x.side==='T')t++; else o++;
+      var as=x.a.length?x.a.join(', '):'unassisted';
+      return '<li class="'+(x.side==='T'?'us':'them')+'"><small>'+x.per+' '+x.time+'</small><span>'+(x.side==='T'?'306ers':esc(sc.opp))+' · '+esc(x.scorer)+(x.tag?' <small>'+x.tag+'</small>':'')+' <small>('+esc(as)+') '+t+'-'+o+'</small></span></li>'}).join('');
+    var pl=g.pens.length?g.pens.map(function(p){return '<li class="'+(p.side==='T'?'us':'them')+'"><small>'+p.per+' '+p.time+'</small><span>'+(p.side==='T'?'306ers':esc(sc.opp))+' · '+esc(p.name)+', '+esc(p.inf)+'</span></li>'}).join(''):'<li><small></small><span class="sub">No penalties</span></li>';
+    return '<article class="gcard '+res+'"><div class="hd"><div><span class="pill '+res+'">'+res+'</span> <span class="meta">Game '+g.n+' · '+dlabel(sc.date)+' · '+(sc.ha==='H'?'vs ':'@ ')+esc(sc.opp)+' · '+esc(arena(sc.arena))+'</span></div><div class="sc">'+sc.gf+'-'+sc.ga+'</div></div>'+
+      '<h3 class="head">'+esc(g.head)+'</h3><p>'+esc(g.body)+'</p>'+
+      '<details><summary>Goals and penalties</summary><ul class="plain log">'+gl+'</ul><h3 style="margin:12px 0 4px;font-size:1rem">Penalties</h3><ul class="plain log">'+pl+'</ul></details>'+
+      '<a href="https://cmhahockey.com/game/'+g.gid+'/summary" rel="noopener" style="font-size:.88rem">CMHA game summary</a></article>'}).join('');
+  $('#v-game-recaps').innerHTML='<h2>Game Recaps</h2><p class="lede">Newest first. Each recap is written from that game’s goal and penalty log.</p><div class="stack">'+cards+'</div>';
+})();
+
+/* ---------- SCHEDULE ---------- */
+(function(){
+  var nxt=upcoming[0]?upcoming[0].n:null, filter='all';
+  function draw(){
+    var rows=D.sched.filter(function(s){return filter==='all'||(filter==='played'&&s.res)||(filter==='upcoming'&&!s.res)}).map(function(s){
+      var link=s.res&&s.gid?'<a href="https://cmhahockey.com/game/'+s.gid+'/summary" rel="noopener">Summary</a>':(!s.res?'<a href="https://cmhahockey.com/game/'+s.gid+'/preview" rel="noopener">Preview</a>':'');
+      var r=s.res?'<span class="pill '+s.res+'">'+s.res+'</span> '+s.gf+'-'+s.ga:'<span class="pill up">'+(s.n===nxt?'NEXT':'TBD')+'</span>';
+      return '<tr><td>'+s.n+'</td><td class="l">'+dlabel(s.date)+'</td><td class="l">'+s.time+'</td><td class="l">'+esc(arena(s.arena))+'</td><td class="l">'+(s.ha==='H'?'Home':'Away')+'</td><td class="l pl">'+esc(s.opp)+'</td><td class="l">'+r+'</td><td class="l">'+link+'</td></tr>'}).join('');
+    $('#stable').innerHTML='<thead><tr><th>#</th><th class="l">Date</th><th class="l">Time</th><th class="l">Arena</th><th class="l">H/A</th><th class="l">Opponent</th><th class="l">Result</th><th class="l">CMHA</th></tr></thead><tbody>'+rows+'</tbody>'}
+  $('#v-schedule').innerHTML='<h2>Schedule</h2><p class="lede">All '+D.sched.length+' games. CMHA also publishes a calendar subscription feed for the team at cmhahockey.com/cal-subscription/4035.</p>'+
+   '<div class="ctl" role="group" aria-label="Filter games"><button data-f="all" aria-pressed="true">All '+D.sched.length+'</button><button data-f="upcoming" aria-pressed="false">Upcoming</button><button data-f="played" aria-pressed="false">Played</button></div>'+
+   '<div class="tablewrap"><table id="stable"></table></div>';
+  $('#v-schedule').addEventListener('click',function(e){var b=e.target.closest('[data-f]'); if(!b)return; filter=b.getAttribute('data-f');
+    [].forEach.call($('#v-schedule').querySelectorAll('[data-f]'),function(x){x.setAttribute('aria-pressed',x===b)}); draw()});
+  draw();
+})();
+
+/* ---------- TRENDS ---------- */
+(function(){
+  var pf=D.per.T, pa=D.per.O, mx=Math.max(pf['1st'],pf['2nd'],pf['3rd'],pa['1st'],pa['2nd'],pa['3rd']);
+  var pcols=['1st','2nd','3rd'].map(function(p){
+    return '<div class="pcol"><div class="pair">'+
+      '<i class="us-c" style="height:'+(100*pf[p]/mx)+'%" data-tip="306ers scored '+pf[p]+' in the '+p+'"><b>'+pf[p]+'</b></i>'+
+      '<i class="them-c" style="height:'+(100*pa[p]/mx)+'%" data-tip="Opponents scored '+pa[p]+' in the '+p+'"><b>'+pa[p]+'</b></i></div><div class="lab">'+p+' period</div></div>'}).join('');
+  function worstStarts(){
+    var rows=[]; D.games.forEach(function(g){var sc=D.sched.filter(function(s){return s.n===g.n})[0];
+      if(!sc||sc.res!=='L')return;
+      var t=0,o=0; g.goals.forEach(function(x){if(x.per==='1st'){if(x.side==='T')t++;else o++}});
+      if(o-t>=3)rows.push({o:o,t:t,sc:sc,d:o-t})});
+    rows.sort(function(a,b){return b.d-a.d}).splice(2);
+    if(!rows.length)return '';
+    return (rows.length===1?'One of our losses, ':'Two of our losses, ')+rows.map(function(r){return r.sc.gf+'-'+r.sc.ga+' to '+r.sc.opp}).join(' and ')+', started with '+rows.map(function(r){return 'a '+r.o+'-'+r.t}).join(' and ')+' first period against.'}
+  var later_f=pf['2nd']+pf['3rd'], later_a=pa['2nd']+pa['3rd'];
+  function rec(filterFn){var w=0,l=0,gf=0,ga=0; played.filter(filterFn).forEach(function(s){if(s.res==='W')w++;else l++;gf+=s.gf;ga+=s.ga}); return {w:w,l:l,gf:gf,ga:ga,n:w+l}}
+  function row(label,r){return r.n?'<tr><td class="pl">'+esc(label)+'</td><td>'+r.w+'-'+r.l+'</td><td>'+r.gf+'-'+r.ga+'</td><td>'+(r.gf-r.ga>0?'+':'')+(r.gf-r.ga)+'</td></tr>':''}
+  var opps=[]; D.sched.forEach(function(s){if(opps.indexOf(s.opp)<0)opps.push(s.opp)});
+  var arenas=[]; D.sched.forEach(function(s){if(s.res&&arenas.indexOf(s.arena)<0)arenas.push(s.arena)});
+  function hr(m){var h=+m[1]; var pm=m[3]; if(pm==='PM'&&h!==12)h+=12; return h+ +m[2]/60}
+  function startH(s){var m=s.time.match(/(\d+):(\d+) (AM|PM)/); return hr([0,m[1],m[2],m[3]])}
+  var sp=D.spec;
+  $('#v-trends').innerHTML='<h2>Trends</h2><p class="lede">Where goals come from and where they go.</p>'+
+   '<div class="grid g2">'+
+    '<div class="card"><h3>Goals by period</h3><div class="legend"><span><i class="sw us-c"></i>306ers</span><span><i class="sw them-c"></i>Opponents</span></div><div class="per">'+pcols+'</div>'+
+     '<p class="note">In the first period we '+(pf['1st']<pa['1st']?'are outscored ':pf['1st']>pa['1st']?'outscore opponents ':'are even, ')+pf['1st']+'-'+pa['1st']+'. In the second and third we '+(later_f>later_a?'outscore opponents ':later_f<later_a?'are outscored ':'are even, ')+later_f+'-'+later_a+'. '+worstStarts()+'</p></div>'+
+    '<div class="card"><h3>Special teams and penalties</h3><div class="grid g2" style="gap:10px">'+
+     '<div class="tile"><b>'+sp.ppF+'-'+sp.ppA+'</b><span>Power-play goals, for and against</span></div>'+
+     '<div class="tile"><b>'+sp.shF+'-'+sp.shA+'</b><span>Shorthanded goals, for and against</span></div>'+
+     '<div class="tile"><b>'+sp.penF+'-'+sp.penA+'</b><span>Penalties, ours and theirs</span></div>'+
+     '<div class="tile"><b>'+(sp.penF*2)+'</b><span>Our penalty minutes</span></div></div>'+
+     '<p class="note">Counts come from the '+nSum+' game summaries.</p></div>'+
+   '</div>'+
+   '<div class="grid g2" style="margin-top:16px">'+
+    '<div class="card"><h3>Record splits</h3><div class="tablewrap" style="border:0"><table><thead><tr><th>Split</th><th>W-L</th><th>GF-GA</th><th>Diff</th></tr></thead><tbody>'+
+      row('Home',rec(function(s){return s.ha==='H'}))+row('Away',rec(function(s){return s.ha==='A'}))+
+      row('Weekday (Mon to Fri)',rec(function(s){var d=dt(s.date).getDay();return d>=1&&d<=5}))+row('Weekend (Sat and Sun)',rec(function(s){var d=dt(s.date).getDay();return d===0||d===6}))+
+      row('Before 6 PM start',rec(function(s){return startH(s)<18}))+row('6 to 8 PM start',rec(function(s){return startH(s)>=18&&startH(s)<20}))+row('8 PM or later start',rec(function(s){return startH(s)>=20}))+
+      '</tbody></table></div></div>'+
+    '<div class="card"><h3>By opponent</h3><div class="tablewrap" style="border:0"><table><thead><tr><th>Opponent</th><th>W-L</th><th>GF-GA</th><th>Diff</th></tr></thead><tbody>'+
+      opps.map(function(o){return row(o,rec(function(s){return s.opp===o}))}).join('')+'</tbody></table></div></div>'+
+   '</div>'+
+   '<div class="card" style="margin-top:16px"><h3>By rink</h3><div class="tablewrap" style="border:0"><table><thead><tr><th>Rink</th><th>W-L</th><th>GF-GA</th><th>Diff</th></tr></thead><tbody>'+
+      arenas.map(function(a){return row(arena(a),rec(function(s){return s.arena===a}))}).join('')+'</tbody></table></div><p class="note">Small samples: most rinks have one to three games so far.</p></div>';
+})();
+})();
+</script>
+</body>
+</html>

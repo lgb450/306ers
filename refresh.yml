@@ -1,0 +1,60 @@
+name: Refresh stats from CMHA
+
+on:
+  schedule:
+    - cron: '*/30 * * * *'     # every 30 min: only does real work if a game finished 2+ hours ago with no result yet
+    - cron: '30 14 * * *'      # once a day regardless, to catch corrections and rescheduled games
+  workflow_dispatch: {}        # "Run workflow" button in the Actions tab
+
+permissions:
+  contents: write
+
+concurrency:
+  group: refresh
+  cancel-in-progress: false
+
+jobs:
+  refresh:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+
+      - name: Is a game due?
+        id: gate
+        env:
+          # the 30-minute schedule is gated; the daily schedule and manual runs always refresh
+          ONLY_IF_GAME_DUE: ${{ github.event_name == 'schedule' && github.event.schedule == '*/30 * * * *' }}
+        run: python scripts/should_refresh.py
+
+      - uses: actions/setup-node@v4
+        if: steps.gate.outputs.refresh == 'true'
+        with:
+          node-version: 22
+          cache: npm
+
+      - name: Fetch latest data from CMHA
+        if: steps.gate.outputs.refresh == 'true'
+        run: |
+          npm ci
+          node scripts/refresh_cmha.mjs
+
+      - name: Rebuild the site (fails if the data does not add up)
+        if: steps.gate.outputs.refresh == 'true'
+        run: python scripts/build.py
+
+      - name: Commit if anything changed
+        if: steps.gate.outputs.refresh == 'true'
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add data docs
+          if git diff --cached --quiet; then
+            echo "No changes."
+          else
+            git commit -m "Auto-refresh stats from CMHA"
+            git push
+          fi
